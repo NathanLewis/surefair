@@ -2,11 +2,10 @@ import React, { Component } from 'react';
 import './App.css';
 import {Navbar} from 'react-bootstrap';
 import Navigation from './Components/Navigation'
+import tableHtml from './Components/Navigation'
 //import Web3 from 'web3'
 import _ from 'lodash'
-import {Navbar, Jumbotron, Button, Nav, NavItem, NavDropdown,
-  MenuItem, FormGroup, FormControl} from 'react-bootstrap';
-import {BootstrapTable, TableHeaderColumn} from 'react-bootstrap-table';
+//import {BootstrapTable, TableHeaderColumn} from 'react-bootstrap-table';
 
 var BrowserRouter = require('react-router-dom').BrowserRouter
 var Route = require('react-router-dom').Route
@@ -26,8 +25,8 @@ class App extends Component {
     super(props);
        this.state = {
         synABIState: '', oracleABIState: '',
-      syndicateAddress: '0x972a0b51f5e882b85315b2923369fed233dcaabb',
-      oracleAddress: '0xf876e98ec2baeae19ea6b2687991b243b50567ae'}
+      syndicateAddress: '0x45790ce1c3dec66a1041bb892ddbcb5aa14ef0ba',
+      oracleAddress: '0xa7f5500bfe728770dc9a779fe13f516701db4278'}
 
 
     this.getSelectedRowKeys = this.getSelectedRowKeys.bind(this)
@@ -79,20 +78,6 @@ var fullOracleAddress=[];
       fullOracleAddress.push({ 'oracleAddress': anOracleAddress });
     }
 
-      var tableHtml =
-      <div>
-      <button onClick={this.getSelectedRowKeys.bind(this)}>Buy</button>
-      <button><Link  to={'/about'}>Link</Link></button>
-   <BootstrapTable data={fullOracleAddress} selectRow={selectRowProp} ref='table'
-   striped={true} hover={true}>
-       <TableHeaderColumn      dataField="oracleAddress" isKey={true} dataAlign="center"
-       dataSort={true}>OracleAddress</TableHeaderColumn>
-
-     </BootstrapTable>
-     </div>
-
-
-
       return (
         <div>
         <BrowserRouter>
@@ -101,7 +86,7 @@ var fullOracleAddress=[];
               <div  >
                 <Navigation/>
                 <div>
-                  {tableHtml}
+                  <tableHtml getSelectedRowKeys={this.getSelectedRowKeys}/>
                 </div>
               </div>
             )} />
