@@ -1,5 +1,3 @@
-import axios from 'axios';
-
 import Web3 from 'web3';
 
 const web3 = new Web3(new Web3.providers.HttpProvider("https://ropsten.infura.io/jD3JIY48Jf0zUvTqJVMF"));
@@ -41,7 +39,7 @@ class ContractApi {
       var result = {};
       var resolved = 0;
       var resolveCheck = () => {
-        resovle++;
+        resolve++;
         if (resolved == 3) {
           let userEscrowBalance = (result.userBalance / result.totalSupply) * result.escrowBalance;
           resolve(result);
@@ -133,7 +131,7 @@ class ContractApi {
         from: web3.eth.defaultAccount
       });
       let gasCost = parseInt(web3.eth.estimateGas({
-        from: sender,
+        from: web3.eth.defaultAccount,
         to: macbookContractAddress,
         data: functionData
       }));
