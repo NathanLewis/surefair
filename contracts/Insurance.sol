@@ -2,13 +2,7 @@ pragma solidity ^0.4.10;
 
 
 contract Oracle {
-<<<<<<< HEAD
-    function getClientData(address client, uint64 quoteId) constant returns (uint256, uint256, uint256);
-||||||| merged common ancestors
-    function getQuote(address client, uint64 quoteId) constant returns (uint256, uint256, uint256);
-=======
     function getQuote(address client, uint64 quoteId) constant returns (uint256, uint256, uint256, bytes32);
->>>>>>> bb47183d0bcfe2f8a2cc4a3a8af0ea55a658356c
     function verifyClaim(uint64 quoteId) returns (bool);
 }
 
