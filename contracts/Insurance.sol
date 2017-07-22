@@ -127,6 +127,16 @@ contract Syndicate {
         return oracles;
     }
 
+    function getInsuranceIDsByClient(address _client)  constant returns (uint64[]){
+             return userContracts[_client];
+    }
+    
+    function getInsuranceDataByID(uint64 insuranceID) constant returns (address, address,uint64,uint256,uint256,uint256) {
+        InsuranceInstance insurance = insuranceContracts[insuranceID];
+        return(insurance.client, insurance.oracle, insurance.oracleQuoteId, insurance.clientCost, insurance.clientPayout, insurance.expiryBlock);
+     
+    }
+
     function insureClient(address _oracle, uint64 _oracleQuoteId) { 
         if (!acceptedOracles[_oracle]) {
             throw;
