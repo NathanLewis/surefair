@@ -2,8 +2,7 @@ pragma solidity ^0.4.10;
 
 
 contract Oracle {
-    function getClientData(address client) constant returns (uint256, uint256, uint256);
-    function payoutClient(address client) returns (bool);
+    function getClientData(address client, uint64 quoteId) constant returns (uint256, uint256, uint256);
     function verifyClaim(uint64 quoteId) returns (bool);
 }
 
@@ -70,13 +69,11 @@ contract MacBookOracle {
 }
 
 //##########################################################################
-
-contract Syndiacte {
-    address owner = msg.sender;
+contract Syndicate {
 
     struct InsuranceInstance {
         address client;
-        address orcale;
+        address oracle;
         uint64  oracleQuoteId;
         uint256 clientCost;
         uint256 clientPayout;
@@ -92,40 +89,47 @@ contract Syndiacte {
     mapping(uint64 => address) oracleAddressStore;
     uint64 oracleId;
 
-    function getAcceptedOracles() constant returns address[] {
-        address[] memory oracles = new address[](oracleId);
-        for (uint i = 0; i < oracleId; i++)
-        {
-            oracles.push(oracleAddressStore);
-        }
-        return oracles;
-    }
-
     uint256 totalBalance;
     uint256 totalDividends;
     uint256 totalPayouts;
+    
+    function isContract(address addr) returns (bool) {
+      uint size;
+      assembly { size := extcodesize(addr) }
+      return size > 0;
+    }
 
     function addOracle(address oracleAddress) {
-        Oracle oracle = Oracle.at(oracleAddress);
-        if (oracle) {
+        Oracle oracle = Oracle(oracleAddress);
+        if (isContract(oracle)) {
             acceptedOracles[oracleAddress] = true;
         }
     }
 
-    function insureClient(addresss _oracle, address _client, uint64 _oracleQuoteId) {
-        
-        if (!acceptedOracles[_oracle] {
+    function getAcceptedOracles() constant returns (address[]) {
+        address[] memory oracles = new address[](oracleId);
+        for (uint64 i = 0; i < oracleId; i++)
+        {
+            oracles[i] = oracleAddressStore[i];
+        }
+        return oracles;
+    }
+
+    function insureClient(address _client, uint64 _oracleQuoteId) { 
+        if (!acceptedOracles[_oracle]) {
             throw;
         }
-        Oracle oracle = Oracle(_oracle);
-        if (oracle.creator != msg.sender) {
+        address _oracle = msg.sender;
+
+        if (_oracle != msg.sender) {
             throw;
         }
-        if (!oracle) {
+        Oracle oracle = Oracle(_oracle); 
+        if (!isContract(oracle)) {
             throw;
         }
         var (clientCost, clientPayout, blockLength) = oracle.getClientData(_client, _oracleQuoteId);
-        if (clientCost > 0 && clientPayout > 0 && clientCost < balance[_client] && clientPayout < totalBalance) {
+        if (clientCost > 0 && clientPayout > 0 && clientCost < balances[_client] && clientPayout < totalBalance) {
             InsuranceInstance memory insuranceInstance;
             insuranceInstance.client = _client;
             insuranceInstance.oracle = _oracle;
@@ -133,36 +137,40 @@ contract Syndiacte {
             insuranceInstance.clientCost = clientCost;
             insuranceInstance.clientPayout = clientPayout;
             insuranceInstance.expiryBlock = block.number + blockLength;
-            insuranceContracts[_client].push(insuranceInstance);
-            updateBalance(_client);
-            balance[_client] -= clientCost;
+            insuranceContracts[contractInstance] = insuranceInstance;
+            userContracts[_client].push(contractInstance);
+            contractInstance++;
+            
+            //updateBalance(_client);
+            balances[_client] -= clientCost;
             totalDividends += clientCost;
         }
     }
 
-    function clientClaim(uint256 _client, uint64 _contractId) {
+    function clientClaim(address _client, uint64 _contractId) {
         InsuranceInstance insuranceInstance = insuranceContracts[_contractId];
-        if (insuranceInstance) {
+        if (insuranceInstance.client == _client) {
             Oracle oracle = Oracle(insuranceInstance.oracle);
-            if (oracle && oracle.verifyClaim(insuranceInstance.oracleQuoteId)) {
+            if (isContract(oracle) && oracle.verifyClaim(insuranceInstance.oracleQuoteId)) {
                 //payout
             }
         }
     }
 
-//-----------------------------------------------------------------------------------------------------------
-    
-    //basic ERC20 token stuff
-    bool public purchasingAllowed = false;
+    function Syndicate() {}
 
+
+//##########################################################################
+
+    //basic ERC20 token stuff
     mapping (address => uint256) balances;
     mapping (address => mapping (address => uint256)) allowed;
 
     uint256 public totalContribution = 0;
     uint256 public totalSupply = 0;
 
-    function name() constant returns (string) { return "Insurance Coin"; }
-    function symbol() constant returns (string) { return "ISC"; }
+    function name() constant returns (string) { return "FairSure Coin"; }
+    function symbol() constant returns (string) { return "FSR"; }
     function decimals() constant returns (uint8) { return 18; }
     
     function balanceOf(address _owner) constant returns (uint256) { return balances[_owner]; }
@@ -181,9 +189,6 @@ contract Syndiacte {
         if (sufficientFunds && !overflowed) {
             balances[msg.sender] -= _value;
             balances[_to] += _value;
-            if (cartels[_to]) {
-               // cartels[_to].updateBalance(msg.sender, _value);
-            }
             Transfer(msg.sender, _to, _value);
             return true;
         } else { return false; }
@@ -211,9 +216,6 @@ contract Syndiacte {
             balances[_from] -= _value;
             
             allowed[_from][msg.sender] -= _value;
-            if (cartels[_to]) {
-               // cartels[_to].updateBalance(msg.sender, _value);
-            }
             Transfer(_from, _to, _value);
             return true;
         } else { return false; }
@@ -236,28 +238,15 @@ contract Syndiacte {
     event Transfer(address indexed _from, address indexed _to, uint256 _value);
     event Approval(address indexed _owner, address indexed _spender, uint256 _value);
 
-    function enablePurchasing() {
-        if (msg.sender != owner) { throw; }
-        purchasingAllowed = true;
+
+    function getStats() constant returns (uint256, uint256) {
+        return (totalContribution, totalSupply);
     }
 
-    function disablePurchasing() {
-        if (msg.sender != owner) { throw; }
-        purchasingAllowed = false;
-    }
-
-    function getStats() constant returns (uint256, uint256, bool) {
-        return (totalContribution, totalSupply, purchasingAllowed);
-    }
-
-    function isVoteActive(uint32 voteId) constant returns (bool) {
-        return votes[voteId].active;
-    }
-    
     function() payable {
         if (msg.value == 0) { return; }
 
-        owner.transfer(msg.value);
+        this.transfer(msg.value);
         totalContribution += msg.value;
         uint256 tokensIssued = (msg.value * 1000);
         totalSupply += tokensIssued;
