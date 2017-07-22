@@ -1,10 +1,6 @@
 import React, { Component } from 'react';
-import logo from './logo.svg';
 import './App.css';
-//import Web3 from 'web3'
-import _ from 'lodash'
-import {Navbar, Jumbotron, Button, Nav, NavItem, NavDropdown,
-  MenuItem, FormGroup, FormControl} from 'react-bootstrap';
+import {Navbar} from 'react-bootstrap';
 import {BootstrapTable, TableHeaderColumn} from 'react-bootstrap-table';
 
 var BrowserRouter = require('react-router-dom').BrowserRouter
