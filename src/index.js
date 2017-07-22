@@ -6,6 +6,8 @@ import { createBrowserHistory } from 'history';
 // Containers
 import Full from './Containers/Full/'
 
+
+
 const history = createBrowserHistory();
 
 ReactDOM.render((

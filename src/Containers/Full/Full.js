@@ -8,7 +8,14 @@ import Footer from '../../Components/Footer/';
 import InvestorDashboard from '../../views/InvestorDashboard/';
 import BuyPolicy from '../../Components/BuyPolicy';
 
+import { init } from '../../ContractApi.js';
+
 class Full extends Component {
+    constructor(props){
+        super(props);
+        console.log('bpee');
+        init();
+    }
     render() {
         return ( 
             <div className = "app">
