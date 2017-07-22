@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import logo from './logo.svg';
 import './App.css';
+import Navigation from './Components/Navigation'
 //import Web3 from 'web3'
 import _ from 'lodash'
 import {Navbar, Jumbotron, Button, Nav, NavItem, NavDropdown,
@@ -90,17 +91,7 @@ var fullOracleAddress=[];
      </BootstrapTable>
      </div>
 
-const navbarInstance = (
-  <Navbar>
-    <Navbar.Header>
-      <Navbar.Brand>
-        <a href="#">SureFair Insurance</a>
-      </Navbar.Brand>
-    </Navbar.Header>
 
- 
-  </Navbar>
-);
 
       return (
         <div>
@@ -108,7 +99,7 @@ const navbarInstance = (
     <div>
             <Route path="/table" render={ () => (
               <div  >
-                {navbarInstance}
+                <Navigation/>
                 <div>
                   {tableHtml}
                 </div>
@@ -116,7 +107,7 @@ const navbarInstance = (
             )} />
             <Route  path="/about" render={ () => (
               <div  >
-                {navbarInstance}
+                <Navigation/>
                 <div>
                   <h1>About Us</h1>
 
