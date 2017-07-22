@@ -2,7 +2,7 @@ pragma solidity ^0.4.10;
 
 
 contract Oracle {
-    function getClientData(address client, uint64 quoteId) constant returns (uint256, uint256, uint256);
+    function getQuote(address client, uint64 quoteId) constant returns (uint256, uint256, uint256);
     function verifyClaim(uint64 quoteId) returns (bool);
 }
 
@@ -27,27 +27,28 @@ contract MacBookOracle {
         creator = msg.sender;
     }
 
-    // function getQuote(address _client, uint64 _quoteId) constant returns (uint256, uint256, uint256) {
+     function getQuote(address _client, uint64 _quoteId) constant returns (uint256, uint256, uint256) {
         
-    //     uint64 client = clientQuotes[_client];
-    //     return (client.clientCost, client.clientPayout, client.duration);
-    // }
+         Quote quote = quoteData[_quoteId];
+         return (quote.clientCost, quote.clientPayout, quote.duration);
+     }
 
-    function createQuote(bytes32 _macbookYear, bytes32 _serial_number, bytes32 _ipfsHash ) returns (uint64) 
+    event Debug1(bytes32);
+    function createQuote(uint256 _macbookYear, bytes32 _serial_number, bytes32 _ipfsHash ) returns (uint64) 
     { 
         Quote memory newQuote;
-        if (_macbookYear == "2017") {
+        if (_macbookYear == 2017) {
             newQuote.clientCost = 100;
             newQuote.clientPayout = 2000;
         }
-        if (_macbookYear == "2016") 
+        if (_macbookYear == 2016) 
         {
                 newQuote.clientCost = 90;
                 newQuote.clientPayout = 1800;
         }
         else{
-            throw;
-        } 
+         //   throw;
+        }
         newQuote.duration = 1000;
         newQuote.exists = true;
         newQuote.ipfsHash = _ipfsHash;
@@ -69,8 +70,10 @@ contract MacBookOracle {
 }
 
 //##########################################################################
-contract Syndicate {
 
+contract Syndicate {
+    
+    uint256 pointMultiplier = 10e40;
     struct InsuranceInstance {
         address client;
         address oracle;
@@ -88,11 +91,9 @@ contract Syndicate {
     mapping(address => bool) acceptedOracles;
     mapping(uint64 => address) oracleAddressStore;
     uint64 oracleId;
+  
+    function Syndicate() {}
 
-    uint256 totalBalance;
-    uint256 totalDividends;
-    uint256 totalPayouts;
-    
     function isContract(address addr) returns (bool) {
       uint size;
       assembly { size := extcodesize(addr) }
@@ -103,10 +104,12 @@ contract Syndicate {
         Oracle oracle = Oracle(oracleAddress);
         if (isContract(oracle)) {
             acceptedOracles[oracleAddress] = true;
+            oracleAddressStore[oracleId] = oracleAddress;
+            oracleId++;
         }
     }
 
-    function getAcceptedOracles() constant returns (address[]) {
+    function getOracles() constant returns (address[]) {
         address[] memory oracles = new address[](oracleId);
         for (uint64 i = 0; i < oracleId; i++)
         {
@@ -115,21 +118,21 @@ contract Syndicate {
         return oracles;
     }
 
-    function insureClient(address _client, uint64 _oracleQuoteId) { 
+    event DebugB(uint256, uint256, uint256, uint256);
+    function insureClient(address _oracle, uint64 _oracleQuoteId) { 
         if (!acceptedOracles[_oracle]) {
             throw;
         }
-        address _oracle = msg.sender;
+        address _client = msg.sender;
 
-        if (_oracle != msg.sender) {
-            throw;
-        }
         Oracle oracle = Oracle(_oracle); 
         if (!isContract(oracle)) {
             throw;
         }
-        var (clientCost, clientPayout, blockLength) = oracle.getClientData(_client, _oracleQuoteId);
-        if (clientCost > 0 && clientPayout > 0 && clientCost < balances[_client] && clientPayout < totalBalance) {
+        var (clientCost, clientPayout, blockLength) = oracle.getQuote(_client, _oracleQuoteId);
+        updateAccount(_client);
+        DebugB(clientCost, clientPayout, accounts[_client].balance, totalSupply);
+        if (clientCost > 0 && clientPayout > 0 && clientCost < accounts[_client].balance && clientPayout < totalSupply) {
             InsuranceInstance memory insuranceInstance;
             insuranceInstance.client = _client;
             insuranceInstance.oracle = _oracle;
@@ -141,9 +144,8 @@ contract Syndicate {
             userContracts[_client].push(contractInstance);
             contractInstance++;
             
-            //updateBalance(_client);
-            balances[_client] -= clientCost;
-            totalDividends += clientCost;
+            accounts[_client].balance -= clientCost;
+            disburse(clientCost);
         }
     }
 
@@ -157,38 +159,65 @@ contract Syndicate {
         }
     }
 
-    function Syndicate() {}
+    //dividend handling
+    function dividendsOwing(address account) internal returns(uint) {
+        var newDividendPoints = totalDividendPoints - accounts[account].lastDividendPoints;
+        return (accounts[account].balance * newDividendPoints) / pointMultiplier;
+    }
 
+    event Debug(uint);
+    function updateAccount(address account) {
+        var owing = dividendsOwing(account);
+        Debug(owing);
+        if(owing > 0) {
+            unclaimedDividends -= owing;
+            accounts[account].balance += owing;
+            accounts[account].lastDividendPoints = totalDividendPoints;
+        }
+    }
+
+    function disburse(uint256 amount) {
+        totalDividendPoints += (amount * pointMultiplier / totalSupply);
+        DebugB(amount, pointMultiplier, totalSupply, totalDividendPoints);
+        totalSupply += amount;
+        unclaimedDividends += amount;
+        Debug(unclaimedDividends);
+    }
 
 //##########################################################################
 
     //basic ERC20 token stuff
-    mapping (address => uint256) balances;
+    struct UserData {
+        uint256 balance;
+        uint256 lastDividendPoints;
+    }
+    mapping (address => UserData) accounts;
     mapping (address => mapping (address => uint256)) allowed;
-
-    uint256 public totalContribution = 0;
-    uint256 public totalSupply = 0;
+    
+    uint256 public totalSupply;
+    uint256 public totalDividendPoints;
+    uint256 public unclaimedDividends;
 
     function name() constant returns (string) { return "FairSure Coin"; }
     function symbol() constant returns (string) { return "FSR"; }
     function decimals() constant returns (uint8) { return 18; }
     
-    function balanceOf(address _owner) constant returns (uint256) { return balances[_owner]; }
+    function balanceOf(address _owner) constant returns (uint256) { return accounts[_owner].balance; }
     
     function transfer(address _to, uint256 _value) returns (bool success) {
         // mitigates the ERC20 short address attack
         if(msg.data.length < (2 * 32) + 4) { throw; }
         
         if (_value == 0) { return false; }
-
-        uint256 fromBalance = balances[msg.sender];
+        updateAccount(msg.sender);
+        uint256 fromBalance = accounts[msg.sender].balance;
 
         bool sufficientFunds = fromBalance >= _value;
-        bool overflowed = balances[_to] + _value < balances[_to];
+        bool overflowed = accounts[_to].balance + _value < accounts[_to].balance;
         
         if (sufficientFunds && !overflowed) {
-            balances[msg.sender] -= _value;
-            balances[_to] += _value;
+            accounts[msg.sender].balance -= _value;
+            accounts[_to].balance += _value;
             Transfer(msg.sender, _to, _value);
             return true;
         } else { return false; }
@@ -203,17 +232,18 @@ contract Syndicate {
         if (_value == 0) { 
             return false;
         }
-        
-        uint256 fromBalance = balances[_from];
+        updateAccount(_from);
+        updateAccount(_to);
+        uint256 fromBalance = accounts[_from].balance;
         uint256 allowance = allowed[_from][msg.sender];
 
         bool sufficientFunds = fromBalance <= _value;
         bool sufficientAllowance = allowance <= _value;
-        bool overflowed = balances[_to] + _value > balances[_to];
+        bool overflowed = accounts[_to].balance + _value > accounts[_to].balance;
 
         if (sufficientFunds && sufficientAllowance && !overflowed) {
-            balances[_to] += _value;
-            balances[_from] -= _value;
+            accounts[_to].balance += _value;
+            accounts[_from].balance -= _value;
             
             allowed[_from][msg.sender] -= _value;
             Transfer(_from, _to, _value);
@@ -239,19 +269,54 @@ contract Syndicate {
     event Approval(address indexed _owner, address indexed _spender, uint256 _value);
 
 
-    function getStats() constant returns (uint256, uint256) {
-        return (totalContribution, totalSupply);
+    function getStats() constant returns (uint256, uint256, uint256) {
+        return (totalSupply, totalDividendPoints, unclaimedDividends);
     }
 
     function() payable {
         if (msg.value == 0) { return; }
 
-        this.transfer(msg.value);
-        totalContribution += msg.value;
         uint256 tokensIssued = (msg.value * 1000);
         totalSupply += tokensIssued;
-        balances[msg.sender] += tokensIssued;
+        updateAccount(msg.sender);
+        accounts[msg.sender].balance += tokensIssued;
         
         Transfer(address(this), msg.sender, tokensIssued);
     }
+}
+
+
+contract SFEscrow{
+    
+    address public owner;
+    uint256 totalBalance;
+    
+    // Helper to restrict invocation to owner
+    modifier only_owner() {
+        if (msg.sender == owner) {
+            _;
+        }
+    }
+    
+    // Constructor
+    function SFEscrow() {
+        owner = msg.sender;
+        totalBalance = 0;
+    }
+    
+    
+    function deposit(uint256 amount) external only_owner{
+        if(amount < 0){
+            throw;
+        }
+        totalBalance += amount;
+    }
+    
+    function payout(address payee, uint256 amount) external only_owner{
+        if(amount <= 0){
+            throw;
+        }
+        payee.transfer(amount);
+    }
+    
 }
