@@ -19,7 +19,7 @@
     "react-router-dom": "^4.1.2",
     "react-stepzilla": "^4.6.2",
     "reactstrap": "4.6.2",
-    "web3": "^0.20.1",
+    "web3": "^0.20.1"
   },
   "devDependencies": {
     "gulp": "^3.9.1",
