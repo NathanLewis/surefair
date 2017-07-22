@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-import logo from './logo.svg';
 import './App.css';
+import {Navbar} from 'react-bootstrap';
 import Navigation from './Components/Navigation'
 //import Web3 from 'web3'
 import _ from 'lodash'
