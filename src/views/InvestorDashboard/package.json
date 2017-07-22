@@ -1,0 +1,6 @@
+{
+    "name": "InvestorDashboard",
+    "version": "0.0.0",
+    "private": true,
+    "main": "./InvestorDashboard.js"
+}
