@@ -27,10 +27,18 @@ contract MacBookOracle {
         creator = msg.sender;
     }
 
-     function getQuote(address _client, uint64 _quoteId) constant returns (uint256, uint256, uint256, bytes32) {
+    function getName() constant returns (string) {
+        return "Macbook Insurance";
+    }
+    
+    function getDescription() constant returns (string) {
+        return "A Macbook oracle designed exclusively to insure macbooks created between 2016 and 2017";
+    }
+
+    function getQuote(address _client, uint64 _quoteId) constant returns (uint256, uint256, uint256, bytes32) {
          Quote quote = quoteData[_quoteId];
          return (quote.clientCost, quote.clientPayout, quote.duration, quote.ipfsHash);
-     }
+    }
 
     function createQuote(uint256 _macbookYear, bytes32 _serial_number, bytes32 _ipfsHash ) returns (uint64) 
     { 
@@ -119,10 +127,6 @@ contract Syndicate {
         return oracles;
     }
 
-    function getUserContracts constant returns (uint64[]) {
-
-    }
-
     function insureClient(address _oracle, uint64 _oracleQuoteId) { 
         if (!acceptedOracles[_oracle]) {
             throw;
@@ -160,8 +164,8 @@ contract Syndicate {
         if (insuranceInstance.client == _client) {
             Oracle oracle = Oracle(insuranceInstance.oracle);
             if (isContract(oracle) && oracle.verifyClaim(insuranceInstance.oracleQuoteId)) {
-                updateAccount(insuranceContracts.client);
-                accounts[insuranceContracts.client].balance += insuranceInstance.clientPayout;
+                updateAccount(insuranceInstance.client);
+                accounts[insuranceInstance.client].balance += insuranceInstance.clientPayout;
                 drawDown(insuranceInstance.clientPayout);
             }
         }
@@ -169,9 +173,9 @@ contract Syndicate {
 
     function redeemFromEscrow(uint64 _contractId) {
         InsuranceInstance insuranceInstance = insuranceContracts[_contractId];
-        if (insuranceContracts.expiryBlock < block.number) {
-           // escrow.[]//??
-            totalSupply += clientPayout;
+        if (insuranceInstance.expiryBlock < block.number) {
+            escrow.redeem(insuranceInstance.clientPayout);
+            totalSupply += insuranceInstance.clientPayout;
         }
     }
 
@@ -337,8 +341,7 @@ contract SFEscrow{
         owner = msg.sender;
         totalBalance = 0;
     }
-    
-    
+     
     function deposit(uint256 amount) external only_owner{
         if(amount < 0){
             throw;
@@ -350,7 +353,7 @@ contract SFEscrow{
         if(amount < 0) {
             throw;
         }
-        totalBalace -= amount;
+        totalBalance -= amount;
     }
 
     function payout(address payee, uint256 amount) external only_owner{
