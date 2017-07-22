@@ -1,6 +1,11 @@
 import React, { Component } from 'react';
 import './App.css';
 import {Navbar} from 'react-bootstrap';
+import Navigation from './Components/Navigation'
+//import Web3 from 'web3'
+import _ from 'lodash'
+import {Navbar, Jumbotron, Button, Nav, NavItem, NavDropdown,
+  MenuItem, FormGroup, FormControl} from 'react-bootstrap';
 import {BootstrapTable, TableHeaderColumn} from 'react-bootstrap-table';
 
 var BrowserRouter = require('react-router-dom').BrowserRouter
@@ -86,17 +91,7 @@ var fullOracleAddress=[];
      </BootstrapTable>
      </div>
 
-const navbarInstance = (
-  <Navbar>
-    <Navbar.Header>
-      <Navbar.Brand>
-        <a href="#">SureFair Insurance</a>
-      </Navbar.Brand>
-    </Navbar.Header>
 
- 
-  </Navbar>
-);
 
       return (
         <div>
@@ -104,7 +99,7 @@ const navbarInstance = (
     <div>
             <Route path="/table" render={ () => (
               <div  >
-                {navbarInstance}
+                <Navigation/>
                 <div>
                   {tableHtml}
                 </div>
@@ -112,7 +107,7 @@ const navbarInstance = (
             )} />
             <Route  path="/about" render={ () => (
               <div  >
-                {navbarInstance}
+                <Navigation/>
                 <div>
                   <h1>About Us</h1>
 
