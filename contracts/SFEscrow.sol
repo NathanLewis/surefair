@@ -1,9 +1,9 @@
 pragma solidity ^0.4.0;
-import "./Insurance.sol";
+
 contract SFEscrow{
     
     address public owner;
-    uint256 public totalBalance;
+    uint256 totalBalance;
     
     // Helper to restrict invocation to owner
     modifier only_owner() {
@@ -27,12 +27,10 @@ contract SFEscrow{
     }
     
     function payout(address payee, uint256 amount) external only_owner{
-        if(amount <= 0 || amount > totalBalance){
+        if(amount <= 0){
             throw;
         }
-        totalBalance -= amount;
-        Syndicate syndicate = Syndicate(owner);
-        syndicate.transfer(amount);
+        payee.transfer(amount);
     }
     
 }
