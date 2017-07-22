@@ -17,8 +17,7 @@ contract DummyOracle {
         uint256 clientCost;
         uint256 clientPayout;
         bool paidOut;
-        uint256 startBlock;
-        uint256 endBlock;
+        uint256 duration;
         bool exists;
     }
 
@@ -26,16 +25,16 @@ contract DummyOracle {
     mapping(address => uint64[]) clients;
     uint64 dataIndex;
     //mapping(address => ClientData) clients;
-    function Oracle(creator) {
+    function DummyOracle(creator) {
         creator = msg.sender;
     }
 
     function getClientData(address _client, uint64 _index) constant returns (uint256, uint256) {
         ClientData client = clients[_client];
-        return (client.clientCost, client.clientPayout);
+        return (client.clientCost, client.clientPayout, client.duration);
     }
 
-    function newClient(bytes32 _macbookModel) returns (uint64) { //oracle determines pricing, toy pricing scheme here; I imagine this will normally be off-chain
+    function getQuote(bytes32 _macbookModel) returns (uint64) { //oracle determines pricing, toy pricing scheme here; I imagine this will normally be off-chain
         ClientData memory newData;
         switch (_macbookModel) {
             case "2017":
@@ -55,8 +54,7 @@ contract DummyOracle {
                 throw;
             }
         }
-        newClient.startBlock = block.number;
-        newClient.endBlock = block.number + 1000;
+        newClient.duration = 1000;
         newClient.exists = true;
         let userDataIndex = dataIndex;
         clients[userDataIndex] = newData;
@@ -93,15 +91,26 @@ contract Syndiacte {
     struct InsuranceInstance {
         address client;
         address orcale;
+        uint64  quoteId;
         uint256 clientCost;
         uint256 clientPayout;
+        uint256 expiryBlock;
     }
 
-    //what needs to happen
-    mapping(address => bool) acceptedOracles;
     mapping(uint64 => InsuranceInstance) insuranceContracts;
     mapping(address => uint64[]) userContracts;
     uint64 contractInstance;
+
+    //what needs to happen
+    mapping(address => bool) acceptedOracles;
+    mapping(uint64 => address) oracleAddressStore;
+    uint64 oracleId;
+
+    function getOracles() constant returns address[] {
+        for ()
+    }
+
+ 
 
     uint256 totalBalance;
     uint256 totalDividends;
@@ -114,7 +123,7 @@ contract Syndiacte {
         } //??
     }
 
-    function insureClient(addresss _oracle, address _client, uint64 _oracleDataIndex) {
+    function insureClient(addresss _oracle, address _client, uint64 _oracleQuote) {
         
         if (!acceptedOracles[_oracle] {
             throw;
@@ -126,7 +135,7 @@ contract Syndiacte {
         if (!oracle) {
             throw;
         }
-        var (clientCost, clientPayout) = oracle.getClientData(_client, _oracleDataIndex);
+        var (clientCost, clientPayout, endBlock) = oracle.getClientData(_client, _oracleDataIndex);
         if (clientCost > 0 && clientPayout > 0 && clientCost < balance[_client] && clientPayout < totalBalance) {
             InsuranceInstance memory insuranceInstance;
             insuranceInstance.client = _client;
@@ -134,7 +143,7 @@ contract Syndiacte {
             insuranceInstance.oracleDataIndex = _oracleDataIndex;
             insuranceInstance.clientCost = clientCost;
             insuranceInstance.clientPayout = clientPayout;
-           //
+            insuranceInstance.expiryBlock = endBlock;
             insuranceContracts[_client].push(insuranceInstance);
             updateBalance(_client);
             balance[_client] -= clientCost;
