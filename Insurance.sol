@@ -4,12 +4,11 @@ pragma solidity ^0.4.10;
 contract Oracle {
     function getClientData(address client) constant returns (uint256, uint256, uint256);
     function payoutClient(address client) returns (bool);
+    function verifyClaim(uint64 quoteId) returns (bool);
 }
 
 
 contract DummyOracle {
-
-    address creator;
 
     struct Quote {
         InsuranceBase contract;
@@ -18,11 +17,13 @@ contract DummyOracle {
         bool paidOut;
         uint256 duration;
         bool exists;
-    }
-
+    } 
     mapping(uint64 => Quote) quoteData;
     mapping(address => uint64[]) quotes;
     uint64 quoteIndex;
+
+    address creator;
+
     function DummyOracle(creator) {
         creator = msg.sender;
     }
@@ -61,7 +62,7 @@ contract DummyOracle {
         return userQuoteIndex;
     }
 
-    function validateClaim(uint64 _quoteId) returns (bool) {
+    function verifyClaim(uint64 _quoteId) returns (bool) {
         Quote quote = quotes[_quoteId];
         if (quote) {
             return true; //what a generous oracle, claims are always valid!
@@ -69,6 +70,8 @@ contract DummyOracle {
         return false;
     }
 }
+
+//##########################################################################
 
 contract Syndiacte {
     address owner = msg.sender;
@@ -91,7 +94,7 @@ contract Syndiacte {
     mapping(uint64 => address) oracleAddressStore;
     uint64 oracleId;
 
-    function getOracles() constant returns address[] {
+    function getAcceptedOracles() constant returns address[] {
         address[] memory oracles = new address[](oracleId);
         for (uint i = 0; i < oracleId; i++)
         {
@@ -245,15 +248,6 @@ contract Syndiacte {
         purchasingAllowed = false;
     }
 
-    function withdrawForeignTokens(address _tokenContract) returns (bool) {
-        if (msg.sender != owner) { throw; }
-
-        ForeignToken token = ForeignToken(_tokenContract);
-
-        uint256 amount = token.balanceOf(address(this));
-        return token.transfer(owner, amount);
-    }
-
     function getStats() constant returns (uint256, uint256, bool) {
         return (totalContribution, totalSupply, purchasingAllowed);
     }
@@ -263,8 +257,6 @@ contract Syndiacte {
     }
     
     function() payable {
-        if (!purchasingAllowed) { throw; }
-        
         if (msg.value == 0) { return; }
 
         owner.transfer(msg.value);
