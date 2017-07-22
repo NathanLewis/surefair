@@ -1,8 +1,17 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import './index.css';
-import App from './App';
-import registerServiceWorker from './registerServiceWorker';
+import { HashRouter, Route, Switch } from 'react-router-dom'
+import { createBrowserHistory } from 'history';
 
-ReactDOM.render(<App />, document.getElementById('root'));
-registerServiceWorker();
+// Containers
+import Full from './Containers/Full/'
+
+const history = createBrowserHistory();
+
+ReactDOM.render((
+  <HashRouter history={history}>
+    <Switch>
+      <Route path="/" name="Home" component={Full}/>
+    </Switch>
+  </HashRouter>
+), document.getElementById('root'))
