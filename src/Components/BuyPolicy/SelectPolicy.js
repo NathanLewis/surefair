@@ -6,7 +6,6 @@ export default class SelectPolicy extends Component{
         return(
         <div className="step step1">
         <div className="row">
-          Select policy
                 <SelectPolicyButton/>
         </div>
         </div>

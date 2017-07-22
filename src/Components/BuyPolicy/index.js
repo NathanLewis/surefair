@@ -6,7 +6,7 @@ import SelectPolicy from './SelectPolicy';
 const steps =
     [
       {name: 'Select Policy', component: <SelectPolicy />},
-      {name: 'Enter Policy Details', component: <EnterPolicyDetails />},
+      {name: 'Enter Policy Details', component: <EnterPolicyDetails policyType={'mac'} />},
       {name: 'Confirmation', component: <Confirmation />},
       {name: 'Confirmation', component: <Confirmation/>}
     ]

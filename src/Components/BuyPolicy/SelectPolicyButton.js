@@ -6,7 +6,7 @@ export default class SelectPolicyButton extends Component{
         super(props);
     }
     render(){
-        return
+        return(
         <Button type="button" className="btn" onClick={() => {}}><img src="public/img/buttons/macbook.jpg" /></Button>
-    }
+        )}
 }
