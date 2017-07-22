@@ -7,6 +7,68 @@ contract Oracle {
 }
 
 
+contract CropOpracle {
+
+    struct Quote {
+        uint256 clientCost;
+        uint256 clientPayout;
+        bool paidOut;
+        uint256 duration;
+        bool exists;
+        bytes32 ipfsHash;
+    } 
+    mapping(uint64 => Quote) quoteData;
+    mapping(address => uint64[]) clientQuotes;
+    uint64 quoteIndex;
+
+    address creator;
+
+    function CropOracle(address creator) {
+        creator = msg.sender;
+    }
+
+    function getOracleDetails() constant returns (string, string) {
+        return ("Crop Insurance", "An oracle to issue crop insurance.");
+    }
+
+    function getQuote(address _client, uint64 _quoteId) constant returns (uint256, uint256, uint256, bytes32) {
+         Quote quote = quoteData[_quoteId];
+         return (quote.clientCost, quote.clientPayout, quote.duration, quote.ipfsHash);
+    }
+
+    function createQuote(uint256 gpsLat, uint256 gpsLong, bytes32 _ipfsHash ) returns (uint64) 
+    { 
+        Quote memory newQuote;
+        if ((gpsLat/10 < 20 && gpsLat/10 > 10 && gpsLong/10 > 30 && gpsLong/10 < 35)) {
+            newQuote.clientCost = 1000;
+            newQuote.clientPayout = 2000;
+        }
+        else
+        {
+            newQuote.clientCost = 100;
+            newQuote.clientPayout = 3000;
+        }
+
+        newQuote.duration = 1000;
+        newQuote.exists = true;
+        newQuote.ipfsHash = _ipfsHash;
+        
+        uint64 userQuoteIndex = quoteIndex;
+        quoteData[userQuoteIndex] = newQuote;
+        clientQuotes[msg.sender].push(userQuoteIndex);
+        quoteIndex++;
+        return userQuoteIndex;
+    }
+
+    function verifyClaim(uint64 _quoteId) returns (bool) {
+        Quote storage quote = quoteData[_quoteId];
+        if (quote.exists) {
+            return true; //what a generous oracle, claims are always valid!
+        }
+        return false;
+    }
+}
+
 contract MacBookOracle {
 
     struct Quote {
@@ -27,12 +89,8 @@ contract MacBookOracle {
         creator = msg.sender;
     }
 
-    function getName() constant returns (string) {
-        return "Macbook Insurance";
-    }
-    
-    function getDescription() constant returns (string) {
-        return "A Macbook oracle designed exclusively to insure macbooks created between 2016 and 2017";
+    function getOracleDetails() constant returns (string, string) {
+        return ("Macbook Insurance", "A Macbook oracle designed exclusively to insure macbooks created between 2016 and 2017.");
     }
 
     function getQuote(address _client, uint64 _quoteId) constant returns (uint256, uint256, uint256, bytes32) {
@@ -40,7 +98,7 @@ contract MacBookOracle {
          return (quote.clientCost, quote.clientPayout, quote.duration, quote.ipfsHash);
     }
 
-    function createQuote(uint256 _macbookYear, bytes32 _serial_number, bytes32 _ipfsHash ) returns (uint64) 
+    function createQuote(uint256 _macbookYear, bytes32 _serial_number, bytes32 _ipfsHash) returns (uint64) 
     { 
         Quote memory newQuote;
         if (_macbookYear == 2017) {
@@ -86,6 +144,7 @@ contract Syndicate {
         uint64  oracleQuoteId;
         uint256 clientCost;
         uint256 clientPayout;
+        uint256 startBlock;
         uint256 expiryBlock;
     }
 
@@ -107,6 +166,23 @@ contract Syndicate {
       uint size;
       assembly { size := extcodesize(addr) }
       return size > 0;
+    }
+
+    function getInsuranceContracts() constant returns (address[], uint256[], uint256[], uint256[], uint256[]) {
+        address[] memory addresses = new address[](contractInstance);
+        uint256[] memory premiums = new uint256[](contractInstance);
+        uint256[] memory payouts = new uint256[](contractInstance);
+        uint256[] memory startBlocks = new uint256[](contractInstance);
+        uint256[] memory endBlocks = new uint256[](contractInstance);
+
+        for (uint64 i = 0; i < contractInstance; i++) {
+            addresses[i] = insuranceContracts[i].client;
+            premiums[i] = insuranceContracts[i].clientCost;
+            payouts[i] = insuranceContracts[i].clientPayout;
+            startBlocks[i] = insuranceContracts[i].startBlock;
+            endBlocks[i] = insuranceContracts[i].expiryBlock;
+        }
+        return (addresses, premiums, payouts, startBlocks, endBlocks);
     }
 
     function addOracle(address oracleAddress) {
@@ -146,14 +222,14 @@ contract Syndicate {
             insuranceInstance.oracleQuoteId = _oracleQuoteId;
             insuranceInstance.clientCost = clientCost;
             insuranceInstance.clientPayout = clientPayout;
+            insuranceInstance.startBlock = block.number;
             insuranceInstance.expiryBlock = block.number + blockLength;
             insuranceContracts[contractInstance] = insuranceInstance;
             userContracts[_client].push(contractInstance);
             contractInstance++;
-
+            drawDown(insuranceInstance.clientPayout);
             totalSupply -= clientPayout;
             escrow.deposit(clientPayout);
-
             accounts[_client].balance -= clientCost;
             disburse(clientCost);
         }
@@ -166,7 +242,6 @@ contract Syndicate {
             if (isContract(oracle) && oracle.verifyClaim(insuranceInstance.oracleQuoteId)) {
                 updateAccount(insuranceInstance.client);
                 accounts[insuranceInstance.client].balance += insuranceInstance.clientPayout;
-                drawDown(insuranceInstance.clientPayout);
             }
         }
     }
@@ -175,6 +250,7 @@ contract Syndicate {
         InsuranceInstance insuranceInstance = insuranceContracts[_contractId];
         if (insuranceInstance.expiryBlock < block.number) {
             escrow.redeem(insuranceInstance.clientPayout);
+            disburse(insuranceInstance.clientPayout);
             totalSupply += insuranceInstance.clientPayout;
         }
     }
@@ -236,6 +312,10 @@ contract Syndicate {
     uint256 public unclaimedDividends;
     uint256 public totalPaymentPoints;
     uint256 public unfulfilledPayments;
+
+    function getEscrowBalance() constant returns (uint256) {
+        return escrow.getBalance();
+    }
 
     function name() constant returns (string) { return "FairSure Coin"; }
     function symbol() constant returns (string) { return "FSR"; }
@@ -342,6 +422,10 @@ contract SFEscrow{
         totalBalance = 0;
     }
      
+    function getBalance() constant returns (uint256) {
+        return totalBalance;
+    }
+    
     function deposit(uint256 amount) external only_owner{
         if(amount < 0){
             throw;
