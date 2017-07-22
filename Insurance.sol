@@ -8,63 +8,61 @@ contract Oracle {
 }
 
 
-contract DummyOracle {
+contract MacBookOracle {
 
     struct Quote {
-        InsuranceBase contract;
         uint256 clientCost;
         uint256 clientPayout;
         bool paidOut;
         uint256 duration;
         bool exists;
+        bytes32 ipfsHash;
     } 
     mapping(uint64 => Quote) quoteData;
-    mapping(address => uint64[]) quotes;
+    mapping(address => uint64[]) clientQuotes;
     uint64 quoteIndex;
 
     address creator;
 
-    function DummyOracle(creator) {
+    function MacBookOracle(address creator) {
         creator = msg.sender;
     }
 
-    function getClientData(address _client, uint64 _index) constant returns (uint256, uint256, uint256) {
-        ClientData client = clients[_client];
-        return (client.clientCost, client.clientPayout, client.duration);
-    }
+    // function getQuote(address _client, uint64 _quoteId) constant returns (uint256, uint256, uint256) {
+        
+    //     uint64 client = clientQuotes[_client];
+    //     return (client.clientCost, client.clientPayout, client.duration);
+    // }
 
-    function getQuote(bytes32 _macbookModel) returns (uint64) { //oracle determines pricing, toy pricing scheme here; I imagine this will normally be off-chain
+    function createQuote(bytes32 _macbookYear, bytes32 _serial_number, bytes32 _ipfsHash ) returns (uint64) 
+    { 
         Quote memory newQuote;
-        switch (_macbookModel) {
-            case "2017":
-            {
-            newData.clientCost = "100";
-            newData.clientPayout = "2000";
-                break;
-            }
-            case "2016":
-            {
-                newData.clientCost = "90";
-                newData.clientPayout = "1800";
-                break;
-            }
-            default:
-            {
-                throw;
-            }
+        if (_macbookYear == "2017") {
+            newQuote.clientCost = 100;
+            newQuote.clientPayout = 2000;
         }
+        if (_macbookYear == "2016") 
+        {
+                newQuote.clientCost = 90;
+                newQuote.clientPayout = 1800;
+        }
+        else{
+            throw;
+        } 
         newQuote.duration = 1000;
         newQuote.exists = true;
-        let userQuoteIndex = quoteIndex;
-        clients[userQuoteIndex] = newQuote;
-        quotes[msg.sender].push(userQuoteIndex);
+        newQuote.ipfsHash = _ipfsHash;
+        
+        uint64 userQuoteIndex = quoteIndex;
+        quoteData[userQuoteIndex] = newQuote;
+        clientQuotes[msg.sender].push(userQuoteIndex);
         quoteIndex++;
         return userQuoteIndex;
     }
 
     function verifyClaim(uint64 _quoteId) returns (bool) {
-        Quote quote = quotes[_quoteId];
-        if (quote) {
+        Quote storage quote = quoteData[_quoteId];
+        if (quote.exists) {
             return true; //what a generous oracle, claims are always valid!
         }
         return false;
