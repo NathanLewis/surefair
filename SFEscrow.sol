@@ -3,7 +3,7 @@ pragma solidity ^0.4.0;
 contract SFEscrow{
     
     address public owner;
-    uint256 totalBalance;
+    uint256 public totalBalance;
     
     // Helper to restrict invocation to owner
     modifier only_owner() {
