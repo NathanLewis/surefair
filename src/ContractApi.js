@@ -1,7 +1,7 @@
 import Web3 from 'web3';
 var web3;
 
-var syndicateContractAddress = "0xeb1bc2f1974e0f130196d1f565afa5563a3dd3c8";
+var syndicateContractAddress = "0xf45d45fa6de62663fb1ab07aad129494f6f35499";
 var macbookContractAddress = "0xa1ca21453c56ad9b42cea29e9980789330756de9";
 var cropContractAddress = "0x4f13c6805692b9a2a5955a021ce840c15d492f7d";
 
@@ -9,6 +9,7 @@ var macbookContract;
 var cropContract;
 var syndicateContract;
 
+var defaultAccount;
 export function init() {
 
   let condition = true;
@@ -46,6 +47,10 @@ export function init() {
   var cropByteCode = "6060604052341561000f57600080fd5b5b6108eb8061001f6000396000f30060606040523615610076576000357c0100000000000000000000000000000000000000000000000000000000900463ffffffff16806341bc7b1f1461007b578063627e64d2146101775780637439a3bd146101f457806394759c3614610239578063a83e1d101461029a578063b3f1586614610329575b600080fd5b341561008657600080fd5b61008e610362565b604051808060200180602001838103835285818151815260200191508051906020019080838360005b838110156100d35780820151818401525b6020810190506100b7565b50505050905090810190601f1680156101005780820380516001836020036101000a031916815260200191505b50838103825284818151815260200191508051906020019080838360005b8381101561013a5780820151818401525b60208101905061011e565b50505050905090810190601f1680156101675780820380516001836020036101000a031916815260200191505b5094505050505060405180910390f35b341561018257600080fd5b6101c1600480803573ffffffffffffffffffffffffffffffffffffffff1690602001909190803567ffffffffffffffff1690602001909190505061040e565b60405180858152602001848152602001838152602001826000191660001916815260200194505050505060405180910390f35b34156101ff57600080fd5b61021f600480803567ffffffffffffffff16906020019091905050610465565b604051808215151515815260200191505060405180910390f35b341561024457600080fd5b6102706004808035906020019091908035906020019091908035600019169060200190919050506104bb565b604051808267ffffffffffffffff1667ffffffffffffffff16815260200191505060405180910390f35b34156102a557600080fd5b6102d1600480803573ffffffffffffffffffffffffffffffffffffffff16906020019091905050610721565b6040518080602001828103825283818151815260200191508051906020019060200280838360005b838110156103155780820151818401525b6020810190506102f9565b505050509050019250505060405180910390f35b341561033457600080fd5b610360600480803573ffffffffffffffffffffffffffffffffffffffff169060200190919050506107f3565b005b61036a6107fa565b6103726107fa565b6040805190810160405280600e81526020017f43726f7020496e737572616e6365000000000000000000000000000000000000815250606060405190810160405280602281526020017f416e206f7261636c6520746f2069737375652063726f7020696e737572616e6381526020017f652e000000000000000000000000000000000000000000000000000000000000815250915091505b9091565b60008060008060008060008767ffffffffffffffff1667ffffffffffffffff1681526020019081526020016000209050806000015481600101548260030154836005015494509450945094505b5092959194509250565b6000806000808467ffffffffffffffff1667ffffffffffffffff16815260200190815260200160002090508060040160009054906101000a900460ff16156104b057600191506104b5565b600091505b50919050565b60006104c561080e565b60006014600a878115156104d557fe5b041080156104ee5750600a80878115156104eb57fe5b04115b80156105065750601e600a8681151561050357fe5b04115b801561051e57506023600a8681151561051b57fe5b04105b15610540576103e88260000181815250506107d0826020018181525050610558565b6064826000018181525050610bb88260200181815250505b6103e88260600181815250506001826080019015159081151581525050838260a001906000191690816000191681525050600260009054906101000a900467ffffffffffffffff169050816000808367ffffffffffffffff1667ffffffffffffffff168152602001908152602001600020600082015181600001556020820151816001015560408201518160020160006101000a81548160ff0219169083151502179055506060820151816003015560808201518160040160006101000a81548160ff02191690831515021790555060a08201518160050190600019169055905050600160003373ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff168152602001908152602001600020805480600101828161068b919061084c565b91600052602060002090600491828204019190066008025b83909190916101000a81548167ffffffffffffffff021916908367ffffffffffffffff160217905550506002600081819054906101000a900467ffffffffffffffff168092919060010191906101000a81548167ffffffffffffffff021916908367ffffffffffffffff160217905550508092505b50509392505050565b610729610886565b600160008373ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff1681526020019081526020016000208054806020026020016040519081016040528092919081815260200182805480156107e657602002820191906000526020600020906000905b82829054906101000a900467ffffffffffffffff1667ffffffffffffffff16815260200190600801906020826007010492830192600103820291508084116107a15790505b505050505090505b919050565b3390505b50565b602060405190810160405280600081525090565b60c060405190810160405280600081526020016000815260200160001515815260200160008152602001600015158152602001600080191681525090565b815481835581811511610881576003016004900481600301600490048360005260206000209182019101610880919061089a565b5b505050565b602060405190810160405280600081525090565b6108bc91905b808211156108b85760008160009055506001016108a0565b5090565b905600a165627a7a72305820d496e0d340b61c7a409d88e24eb50bf5d1584b508182b2f9d2335829aebc59780029";
   var cropContractBase = web3.eth.contract(cropInterface);
   cropContract = cropContractBase.at(cropContractAddress);
+
+  defaultAccount = web3.eth.accounts[0];
+  console.log('ACCOUNTS = ' + web3.eth.accounts);
+  console.log('DEFAULT ACCOUNT = ' + defaultAccount);
 }
 
 class ContractApi {
@@ -89,7 +94,7 @@ class ContractApi {
           resolveCheck();
         }
       });
-      let address = web3.eth.accounts[0];
+      let address = defaultAccount;
       console.log('default address = ' + address);
       syndicateContract.balanceOf(address, (e, res) => {
         if (e) {
@@ -124,7 +129,7 @@ class ContractApi {
 
   static getClientContracts() {
     return new Promise((resolve, reject) => {
-      syndicateContract.getInsuranceIDsByClient(web3.eth.accounts[0], (e, insuranceIds) => {
+      syndicateContract.getInsuranceIDsByClient(defaultAccount, (e, insuranceIds) => {
         if (e) {
           reject(e);
         } else {
@@ -162,10 +167,10 @@ class ContractApi {
     return new Promise((resolve, reject) => {
       console.log("creating macbook quote");
       let functionData = macbookContract.createQuote.getData(year, serialNumber, "", {
-        from: web3.eth.accounts[0]
+        from: defaultAccount
       });
       web3.eth.estimateGas({
-        from: web3.eth.accounts[0],
+        from: defaultAccount,
         to: macbookContractAddress,
         data: functionData
       }, (e, gasCost) => {
@@ -174,7 +179,7 @@ class ContractApi {
         } else {
           console.log('gas callback ' + gasCost);
           macbookContract.createQuote(year, serialNumber, "", {
-            from: web3.eth.accounts[0],
+            from: defaultAccount,
             gas: gasCost
           }, (e, quoteId) => {
             if (e) {
@@ -183,7 +188,7 @@ class ContractApi {
               console.log('create quote result: ' + JSON.stringify(quoteId));
               let result = {};
               result.quoteId = Number(quoteId);
-              macbookContract.getQuote(web3.eth.accounts[0], quoteId, (e, res) => {
+              macbookContract.getQuote(defaultAccount, quoteId, (e, res) => {
                 if (e) {
                   reject(e);
                 } else {
@@ -203,7 +208,7 @@ class ContractApi {
 
   static getMacbookQuotes() {
     return new Promise((resolve, reject) => {
-      macbookContract.getUserQuoteIds(web3.eth.accounts[0], (e, quoteIds) => {
+      macbookContract.getUserQuoteIds(defaultAccount, (e, quoteIds) => {
         if (e) {
           reject(e);
         } else {
@@ -212,7 +217,7 @@ class ContractApi {
           let count = 0;
           for (let i = 0; i < quoteIds.length; i++) {
             console.log('calling get quote');
-            macbookContract.getQuote(web3.eth.accounts[0], quoteIds[i], (e, res) => {
+            macbookContract.getQuote(defaultAccount, quoteIds[i], (e, res) => {
               if (e) {
                 reject(e);
               } else {
@@ -237,14 +242,14 @@ class ContractApi {
 
   static getCropQuotes() {
     return new Promise((resolve, reject) => {
-      cropContract.getUserQuoteIds(web3.eth.accounts[0], (e, quoteIds) => {
+      cropContract.getUserQuoteIds(defaultAccount, (e, quoteIds) => {
         if (e) {
           reject(e);
         } else {
           let quoteData = [];
           let count = 0;
           for (let i = 0; i < quoteIds.length; i++) {
-            cropContract.getQuote(web3.eth.accounts[0], quoteIds[i], (e, res) => {
+            cropContract.getQuote(defaultAccount, quoteIds[i], (e, res) => {
               if (e) {
                 reject(e);
               } else {
@@ -270,16 +275,16 @@ class ContractApi {
   static createCropQuote(latitude, longitude) {
     return new Promise((resolve, reject) => {
       let functionData = cropContract.createQuote.getData(latitude, longitude, "", {
-        from: web3.eth.accounts[0]
+        from: defaultAccount
       });
       // let gasCost = parseInt(web3.eth.estimateGas({
-      //   from: web3.eth.accounts[0],
+      //   from: defaultAccount,
       //   to: cropContractAddress,
       //   data: functionData
       // }));
       let gasCost = 300000;
       cropContract.createQuote(latitude, longitude, "", {
-        from: web3.eth.accounts[0],
+        from: defaultAccount,
         gas: gasCost
       }, (e, quoteId) => {
         if (e) {
@@ -287,7 +292,7 @@ class ContractApi {
         } else {
           let result = {};
           result.quoteId = quoteId;
-          cropContract.getQuote(web3.eth.accounts[0], quoteId, (e, res) => {
+          cropContract.getQuote(defaultAccount, quoteId, (e, res) => {
             if (e) {
               reject(e);
             } else {
@@ -311,17 +316,17 @@ class ContractApi {
         oracleAddress = macbookContractAddress;
       }
       let functionData = syndicateContract.insureClient.getData(oracleAddress, quoteId, {
-        from: web3.eth.accounts[0],
+        from: defaultAccount,
       });
       // let gasCost = parseInt(web3.eth.estimateGas({
-      //   from: web3.eth.accounts[0],
+      //   from: defaultAccount,
       //   to: syndicateContractAddress,
       //   data: functionData
       // }));
       let gasCost = 1000000;
       console.log('oracle address ' + oracleAddress + ', quote id = ' + quoteId);
       syndicateContract.insureClient(oracleAddress, quoteId, {
-        from: web3.eth.accounts[0],
+        from: defaultAccount,
         gas: gasCost
       }, (e, res) => {
         if (e) {
