@@ -26,12 +26,12 @@ class ClientPositions extends React.Component {
     console.log(this.state.macbookQuotes);
     return (
       <div>
-        <div className="row">
-          <div className="col-md-4">
-            <span className="h1" style={{ color: "#3b5998" }}>Active Policies</span>
-          </div>
-        </div>
-          <table>
+            <div className="card">
+              <div className="card-header">
+                <i className="fa fa-align-justify"></i> Active Policies
+              </div>
+        <div className="cardBlock">
+          <table className="table">
             <thead>
               <th>Premium</th>
               <th>Payout</th>
@@ -49,6 +49,8 @@ class ClientPositions extends React.Component {
               )}
             </tbody>
           </table>
+          </div>
+          </div>
         <hr />
        
       </div>
