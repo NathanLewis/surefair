@@ -22,7 +22,7 @@ export default class EnterPolicyDetails extends Component{
                     </div>
                 </div>
                 <div class="form-group row">
-                <button class="btn btn-primary">Request Quotes</button>
+                <button type="submit" class="btn btn-primary">Submit</button>
                 
                 </div>
             </div>

@@ -16,8 +16,6 @@ export default class BuyPolicy extends Component{
     [
       {name: 'Select Policy', component: <SelectPolicy />},
       {name: 'Enter Policy Details', component: <EnterPolicyDetails policyType={'mac'} />},
-      {name: 'Confirmation', component: <Confirmation />},
-      {name: 'Confirmation', component: <Confirmation/>}
     ];
 
         return(
