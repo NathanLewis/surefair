@@ -67,8 +67,10 @@ class ContractApi {
         resolved++;
         console.log('resolved = ' + resolved);
         if (resolved == 3) {
-          result.userEscrowBalance = (result.userBalance / result.totalSupply) * result.escrowBalance;
-          console.log(JSON.stringify(result));
+          result.userEscrowBalance = parseInt((result.userBalance / result.totalSupply) * result.escrowBalance);
+                    console.log('BALANCESIAWREOGUWAHRPGIUH + ' + JSON.stringify(result));
+         // result.userBalance += result.userEscrowBalance;
+
           resolve(result);
         }
       }
@@ -135,24 +137,22 @@ class ContractApi {
         } else {
 
           let count = 0;
-          let result = {
-            premiums: [],
-            payouts: [],
-            startBlocks: [],
-            endBlocks: []
-          };
+          let result = [];
           for (let i = 0; i < insuranceIds.length; i++) {
             syndicateContract.getInsuranceDataByID(insuranceIds[i], (e, data) => {
               if (e) {
                 reject(e);
               } else {
                 console.log('DATA = ' + JSON.stringify(data));
-                result.premiums.push(Number(data[2]));
-                result.payouts.push(Number(data[3]));
-                result.startBlocks.push(Number(data[5]));
-                result.endBlocks.push(Number(data[6]));
+                let temp = {};
+                
+                temp.premium = (Number(data[2]));
+                temp.payout = (Number(data[3]));
+                temp.startBlock = (Number(data[5]));
+                temp.endBlock = (Number(data[6]));
+                result.push(temp);
                 count++;
-                if (count == insuranceIds.length - 1) {
+                if (count == insuranceIds.length) {
                   resolve(result);
                 }
               }
@@ -229,7 +229,8 @@ class ContractApi {
                 result.duration = Number(res[2]) + ' days';
                 quoteData.push(result);
                 count++;
-                if (count == quoteIds.length - 1) {
+                console.log('count ' + count + ' length ' + quoteIds.length);
+                if (count == quoteIds.length) {
                   resolve(quoteData);
                 }
               }
@@ -261,7 +262,7 @@ class ContractApi {
                 result.duration = Number(res[2]) + ' days';
                 quoteData.push(result);
                 count++;
-                if (count == quoteIds.length - 1) {
+                if (count == quoteIds.length) {
                   resolve(quoteData);
                 }
               }

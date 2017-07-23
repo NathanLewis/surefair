@@ -20,7 +20,7 @@ class ClientQuotes extends React.Component {
   }
 
   componentDidMount() {
-
+    console.log('GETTING MACBOOK QUOTES');
     ContractApi.getMacbookQuotes().then((result) => {
       console.log('MACBOOK QUOTES = ' + JSON.stringify(result));
       let thingy = [];
@@ -46,8 +46,13 @@ class ClientQuotes extends React.Component {
     });
   }
 
+  
   createQuote(isMacbook) {
-
+    if (isMacbook) {
+    ContractApi.createMacbookQuote(2016, "123456");
+    } else {
+     ContractApi.createCropQuote(20, 540);     
+    }
   }
 
   buyCropInsurance(quoteId) {
