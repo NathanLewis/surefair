@@ -22,8 +22,14 @@ class InvestorDetails extends React.Component {
 
     ContractApi.getMacbookQuotes().then((result) => {
       console.log('MACBOOK QUOTES = ' + JSON.stringify(result));
+      let thingy = [];
+      for (let i = 0 ; i < result.length; i++) {
+        console.log('thingy' + JSON.stringify(result[i]));
+        thingy.push(result[i]);
+      }
+      console.log('type of = ' + typeof(thingy));
       this.setState({
-        macbookQuotes: result
+        macbookQuotes: thingy
       });
     }).catch((error) => {
       console.log(error);
@@ -39,8 +45,12 @@ class InvestorDetails extends React.Component {
     });
   }
 
-  getQuote() {
+  getQuote(isMacbook) {
+    if (isMacbook) {
     ContractApi.createMacbookQuote(2017, "123456");
+    } else {
+     ContractApi.createCropQuote(20, 540);     
+    }
   }
 
   buyCropInsurance(quoteId) {
@@ -53,6 +63,7 @@ class InvestorDetails extends React.Component {
 
   render() {
     console.log(JSON.stringify(this.state.investorData));
+    console.log(this.state.macbookQuotes);
     return (
       <div>
         <div className="row">
@@ -73,7 +84,8 @@ class InvestorDetails extends React.Component {
           </div>
         </div>
         <hr />
-        <button onClick={() => { this.getQuote() }}>Get a Quote</button>
+        <button onClick={() => { this.getQuote(true) }}>Get a Macbok Quote</button>
+        <button onClick={() => { this.getQuote(false) }}>Get a Crop Quote</button>        
         <div>
           <h3>Crop Quotes</h3>
           <table>
@@ -85,15 +97,15 @@ class InvestorDetails extends React.Component {
               <th />
             </thead>
             <tbody>
-              {this.state.cropQuotes.map((cropQuote, id) => {
-                <tr key={id}>
-                  <td>{cropQuote.quoteId}</td>
-                  <td>{cropQuote.premium}</td>
-                  <td>{cropQuote.payout}</td>
-                  <td>{cropQuote.duration}</td>
-                  <td><button onClick={() => { this.buyCropInsurance(cropQuote.id)}}>Buy</button></td>
-                </tr>
-              })}
+              {this.state.cropQuotes.map((cropQuote, id) =>
+                  <tr key={id}>
+                    <td>{cropQuote.quoteId}</td>
+                    <td>{cropQuote.premium}</td>
+                    <td>{cropQuote.payout}</td>
+                    <td>{cropQuote.duration}</td>
+                    <td><button onClick={() => { this.buyCropInsurance(cropQuote.quoteId) }}>Buy</button></td>
+                  </tr>
+              )}
             </tbody>
           </table>
           <br />
@@ -107,15 +119,15 @@ class InvestorDetails extends React.Component {
               <th />
             </thead>
             <tbody>
-              {this.state.macbookQuotes.map((macbookQuote, id) => {
-                <tr key={id}>
-                  <td>{macbookQuote.quoteId}</td>
-                  <td>{macbookQuote.premium}</td>
-                  <td>{macbookQuote.payout}</td>
-                  <td>{macbookQuote.duration}</td>
-                  <td><button onClick={() => { this.buyMacbookInsurance(macbookQuote.id)}}>Buy</button></td>
-                </tr>
-              })}
+              {this.state.macbookQuotes.map((macbookQuote, id) =>
+                  <tr key={id}>
+                    <td>{macbookQuote.quoteId}</td>
+                    <td>{macbookQuote.premium}</td>
+                    <td>{macbookQuote.payout}</td>
+                    <td>{macbookQuote.duration}</td>
+                    <td><button onClick={() => { this.buyMacbookInsurance(macbookQuote.quoteId) }}>Buy</button></td>
+                  </tr>
+              )}
             </tbody>
           </table>
         </div>
