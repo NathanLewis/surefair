@@ -18,8 +18,9 @@ class ClientQuotes extends React.Component {
       modal: !this.state.modal
     });
   }
-  componentDidMount() {
 
+  componentDidMount() {
+    console.log('GETTING MACBOOK QUOTES');
     ContractApi.getMacbookQuotes().then((result) => {
       console.log('MACBOOK QUOTES = ' + JSON.stringify(result));
       let thingy = [];
@@ -45,8 +46,13 @@ class ClientQuotes extends React.Component {
     });
   }
 
+  
   createQuote(isMacbook) {
-
+    if (isMacbook) {
+    ContractApi.createMacbookQuote(2016, "123456");
+    } else {
+     ContractApi.createCropQuote(20, 540);     
+    }
   }
 
   buyCropInsurance(quoteId) {
@@ -98,7 +104,7 @@ class ClientQuotes extends React.Component {
           <Modal isOpen={this.state.modal} toggle={this.toggle} className={this.props.className}>
             <ModalHeader toggle={this.toggle}>Modal title</ModalHeader>
             <ModalBody>
-              <BuyPolicy />
+              <BuyPolicy onComplete={() => {this.toggle()}} />
             </ModalBody>
           </Modal>
           </div>

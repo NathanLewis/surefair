@@ -15,7 +15,7 @@ export default class BuyPolicy extends Component{
         const steps =
     [
       {name: 'Select Policy', component: <SelectPolicy />},
-      {name: 'Enter Policy Details', component: <EnterPolicyDetails policyType={'mac'} />},
+      {name: 'Enter Policy Details', component: <EnterPolicyDetails onComplete={this.props.onComplete} policyType={'mac'}  />},
     ];
 
         return(
