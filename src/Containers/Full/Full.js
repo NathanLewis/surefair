@@ -6,6 +6,8 @@ import Breadcrumb from '../../Components/Breadcrumb/';
 import Aside from '../../Components/Aside/';
 import Footer from '../../Components/Footer/';
 import InvestorDashboard from '../../views/InvestorDashboard/';
+import ClientDashboard from '../../views/ClientDashboard/ClientDashboard';
+
 import BuyPolicy from '../../Components/BuyPolicy';
 
 import { init } from '../../ContractApi.js';
@@ -26,8 +28,8 @@ class Full extends Component {
             <Breadcrumb/>
             <div className = "container-fluid">
             <Switch>
-            <Route path = "/Investor" name = "Investor Dashboard" component = { InvestorDashboard }/> 
-            <Route path = "/Client" name = "Client" component = { BuyPolicy }/> 
+            <Route path = "/Investor" name = "Investor" component = { InvestorDashboard }/> 
+            <Route path = "/Client" name = "Client" component = { ClientDashboard }/> 
             </Switch>
             </div> 
             </main> 

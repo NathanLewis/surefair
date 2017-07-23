@@ -3,24 +3,30 @@ import StepZilla from 'react-stepzilla';
 import Confirmation from './Confirmation';
 import EnterPolicyDetails from './EnterPolicyDetails';
 import SelectPolicy from './SelectPolicy';
-const steps =
+
+
+
+export default class BuyPolicy extends Component{
+
+    
+
+    
+    render(){
+        const steps =
     [
       {name: 'Select Policy', component: <SelectPolicy />},
       {name: 'Enter Policy Details', component: <EnterPolicyDetails policyType={'mac'} />},
       {name: 'Confirmation', component: <Confirmation />},
       {name: 'Confirmation', component: <Confirmation/>}
-    ]
+    ];
 
-export default class BuyPolicy extends Component{
-    
-    render(){
         return(
            <div className='example'>
-        <div className='step-progress'>
+        <div className='step-progress' style={{textAlign: 'center'}}>
             <StepZilla 
             steps={steps}
             preventEnterSubmission={true}
-            nextTextOnFinalActionStep={"Accept"}
+            showNavigation={false}
             />
         </div>
         </div>

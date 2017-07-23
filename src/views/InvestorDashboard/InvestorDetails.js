@@ -21,10 +21,21 @@ class InvestorDetails extends React.Component {
       console.log(error);
     });
 
+    ContractApi.getClientContracts().then((result) => {
+      console.log('CLIENT CONTRACTS = ' + JSON.stringify(result));
+    }).catch((error) => {
+      console.log('error ' + error);
+    })
     ContractApi.getMacbookQuotes().then((result) => {
       console.log('MACBOOK QUOTES = ' + JSON.stringify(result));
+      let thingy = [];
+      for (let i = 0 ; i < result.length; i++) {
+        console.log('thingy' + JSON.stringify(result[i]));
+        thingy.push(result[i]);
+      }
+      console.log('type of = ' + typeof(thingy));
       this.setState({
-        macbookQuotes: result
+        macbookQuotes: thingy
       });
     }).catch((error) => {
       console.log(error);
@@ -40,8 +51,12 @@ class InvestorDetails extends React.Component {
     });
   }
 
-  getQuote() {
+  getQuote(isMacbook) {
+    if (isMacbook) {
     ContractApi.createMacbookQuote(2017, "123456");
+    } else {
+     ContractApi.createCropQuote(20, 540);     
+    }
   }
 
   buyCropInsurance(quoteId) {
