@@ -21,6 +21,10 @@ export default class EnterPolicyDetails extends Component{
                         <input className="form-control" type="number" value="" id="year" placeholder="YYYY"/>
                     </div>
                 </div>
+                <div class="form-group row">
+                <button class="btn btn-primary">Request Quotes</button>
+                
+                </div>
             </div>
         )
         }

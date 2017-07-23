@@ -9,7 +9,7 @@ export default class SelectPolicy extends Component{
         <div className="row" style={{marginTop: 50, marginBottom: 50}}>
           <div className="col-md-6 col-sm-6" style={{paddingTop: 50, 
           paddingBottom: 50, paddingLeft: 100, paddingRight: 100}}>
-            <div className="social-box facebook">
+            <div className="social-box facebook" onClick={() => this.props.jumpToStep(1)}>
               <i className="fa fa-laptop"></i>
               <ul>
                 <li>
@@ -25,7 +25,7 @@ export default class SelectPolicy extends Component{
           </div>
           <div className="col-md-6 col-sm-6" style={{paddingTop: 50, 
           paddingBottom: 50, paddingLeft: 100, paddingRight: 100}}>
-            <div className="social-box twitter">
+            <div className="social-box twitter"  onClick={this.props.onPolicyTypeSelected}>
               <i className="fa fa-tree"></i>
               <ul>
                 <li>
