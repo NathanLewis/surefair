@@ -18,6 +18,7 @@ class ClientQuotes extends React.Component {
       modal: !this.state.modal
     });
   }
+
   componentDidMount() {
 
     ContractApi.getMacbookQuotes().then((result) => {
@@ -98,7 +99,7 @@ class ClientQuotes extends React.Component {
           <Modal isOpen={this.state.modal} toggle={this.toggle} className={this.props.className}>
             <ModalHeader toggle={this.toggle}>Modal title</ModalHeader>
             <ModalBody>
-              <BuyPolicy />
+              <BuyPolicy onComplete={() => {this.toggle()}} />
             </ModalBody>
           </Modal>
           </div>

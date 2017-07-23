@@ -22,8 +22,7 @@ export default class EnterPolicyDetails extends Component{
   handleSubmit(event) {
     event.preventDefault();
     ContractApi.createMacbookQuote(this.state.year,this.state.serialNumber );
-
-    
+    this.props.onComplete();
   }
 
     render(){
