@@ -83,7 +83,7 @@ class InvestorDetails extends React.Component {
               <div className="col-sm-6">
                 <div className="callout callout-info">
                   <div className="text-muted h5">Syndicate Total Balance</div><br/>
-                  <strong className="h4">{this.state.investorData.totalSupply.toLocaleString()}</strong>
+                  <strong className="h4">{total.toLocaleString()}</strong>
                   <div className="chart-wrapper">
                     <canvas id="sparkline-chart-1" width="100" height="30"></canvas>
                   </div>
@@ -106,7 +106,7 @@ class InvestorDetails extends React.Component {
               <div className="col-sm-6">
                 <div className="callout callout-warning">
                   <div className="text-muted h5">Syndicate Liquid Balance</div><br/>
-                  <strong className="h4">{total.toLocaleString()}</strong>
+                  <strong className="h4">{this.state.investorData.totalSupply.toLocaleString()}</strong>
                   <div className="chart-wrapper">
                     <canvas id="sparkline-chart-3" width="100" height="30"></canvas>
                   </div>
