@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import ContractApi from '../../ContractApi';
 
 export default class EnterPolicyDetails extends Component{
       constructor(props) {
@@ -19,8 +20,10 @@ export default class EnterPolicyDetails extends Component{
   }
 
   handleSubmit(event) {
-    alert('A request has been submitted: ' + this.state.serialNumber + ' ' + this.state.year);
     event.preventDefault();
+    ContractApi.createMacbookQuote(this.state.year,this.state.serialNumber );
+
+    
   }
 
     render(){
@@ -28,13 +31,13 @@ export default class EnterPolicyDetails extends Component{
         return(
              <div className="step step2">
                 <div className="form-group row">
-                <label for="serial-number" className="col-2 col-form-label">Serial Number</label>
+                <label htmlFor="serial-number" className="col-2 col-form-label">Serial Number</label>
                     <div className="col-10">
                         <input className="form-control" type="text" value={this.state.serialNumber} onChange={this.handleSNoChange} id="serial-number" placeholder="####-####-####-####"/>
                     </div>
                 </div>
                 <div className="form-group row">
-                <label for="year" className="col-2 col-form-label">Year of Manufacture</label>
+                <label htmlFor="year" className="col-2 col-form-label">Year of Manufacture</label>
                     <div className="col-10">
                         <input className="form-control" type="number" value={this.state.year} onChange={this.handleYearChange} id="year" placeholder="YYYY"/>
                     </div>
