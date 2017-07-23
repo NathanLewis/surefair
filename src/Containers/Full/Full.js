@@ -28,7 +28,6 @@ class Full extends Component {
             <Switch>
             <Route path = "/Investor" name = "Investor" component = { InvestorDashboard }/> 
             <Route path = "/Client" name = "Client" component = { BuyPolicy }/> 
-            <Redirect from = "/" to = "/Investor"/>
             </Switch>
             </div> 
             </main> 

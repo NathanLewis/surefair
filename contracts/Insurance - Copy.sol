@@ -107,12 +107,11 @@ contract MacBookOracle {
         }
         if (_macbookYear == 2016) 
         {
-            newQuote.clientCost = 90;
-            newQuote.clientPayout = 1800;
+                newQuote.clientCost = 90;
+                newQuote.clientPayout = 1800;
         }
         else{
-            newQuote.clientCost = 10;
-            newQuote.clientPayout = 100;
+            throw;
         }
         newQuote.duration = 1000;
         newQuote.exists = true;
@@ -158,12 +157,8 @@ contract Syndicate {
     mapping(uint64 => address) oracleAddressStore;
     uint64 oracleId;
   
-    address owner;
     SFEscrow escrow;
-    uint256 maxCapitalization;
-    function Syndicate(uint256 maxFund) {
-        owner = msg.sender;
-        maxCapitalization = maxFund;
+    function Syndicate() {
         escrow = new SFEscrow();
     }
 
@@ -191,9 +186,6 @@ contract Syndicate {
     }
 
     function addOracle(address oracleAddress) {
-        if (msg.sender != owner) {
-            throw;
-        }
         Oracle oracle = Oracle(oracleAddress);
         if (isContract(oracle)) {
             acceptedOracles[oracleAddress] = true;
@@ -414,9 +406,6 @@ contract Syndicate {
         if (msg.value == 0) { return; }
 
         uint256 tokensIssued = (msg.value * 1000);
-        if (totalSupply + escrow.getBalance() + tokensIssued > maxCapitalization) {
-            throw;
-        }
         totalSupply += tokensIssued;
         updateAccount(msg.sender);
         accounts[msg.sender].balance += tokensIssued;

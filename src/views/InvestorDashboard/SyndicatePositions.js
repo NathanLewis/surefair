@@ -1,49 +1,89 @@
 import React from 'react';
-import ContractApi from './../../ContractApi';
-import { init }  from './../../ContractApi';
+import contractApi from './../../ContractApi';
+
+
+//TODO
+// 1. get data on component contractApi
+// populate list
 
 class SyndicatePositions extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-        investorData: {}
-    };
+
+  constructor(){
+    super();
+    this.state = {positions: {}};
   }
 
-  componentDidMount() {
-    ContractApi.getInvestorOverview().then((result) => {
+  componentWillMount(){
+
+    contractApi.getAllInsuranceContracts()
+    .then((result) =>{
+      console.log(result);
+
+      let data = [];
+      var accounts = result.accounts;
+      var premiums = result.premiums;
+      var payouts = result.payouts;
+      var startBlocks = result.startBlocks;
+      var endBlocks = result.endBlocks;
+
+      for (var i = 0; i < accounts.length; i++) {
+        data.push({
+          account: accounts[i],
+          premium: premiums[i].c[0],
+          payouts: payouts[i].c[0],
+          startBlocks: startBlocks[i].c[0],
+          endBlocks: endBlocks[i].c[0],
+        })
+        }
       this.setState({
-        investorData: result
-      })
-    }).catch((error) => {
-      console.log(error);
-    });
-  }
+        positions : data
+      });
+    }
 
-  render() {
-    console.log(JSON.stringify(this.state.investorData));
+  );
+  }
+  render(){
+    if(Object.keys(this.state.positions).length === 0 ){
       return (
-        <div>
-            <div className="row">
-            <div className="col-md-4">
-            <span className="h1" style={{color:"#3b5998"}}>Dashboard</span>
-                </div>
-                <div className="col-md-4">
-                 <div className="h3" style={{textAlign:"right"}}>Syndicate Balance</div>
-                 <div className="h3" style={{textAlign:"right"}}>Escrow Balance</div>
-                 <div className="h3" style={{textAlign:"right"}}>Your Liquid Balance</div>   
-                 <div className="h3" style={{textAlign:"right"}}>Your Escrow Balance</div>
-                    </div>
-                    <div className="col-md-4">
-                 <div className="h3" style={{textAlign:"left"}}>{this.state.investorData.totalSupply}</div>
-                 <div className="h3" style={{textAlign:"left"}}>{this.state.investorData.escrowBalance}</div>
-                 <div className="h3" style={{textAlign:"left"}}>{this.state.investorData.userBalance}</div>
-                 <div className="h3" style={{textAlign:"left"}}>{this.state.investorData.userEscrowBalance}</div>
-                        </div>
-                </div>
-                <hr />
-        </div>    
+        <div >
+          Loading positions...
+        </div>
       );
+    }
+      else{
+        return (
+          <div>
+            <h2 className="h2" >Investor Positions</h2>
+          <div className="table-responsive">
+            <table className="table" >
+              <thead>
+               <tr>
+                  <th>Account </th>
+                  <th>Premium </th>
+                  <th>Payouts </th>
+                  <th>Start Block </th>
+                </tr>
+              </thead>
+              <tbody>
+
+                {this.state.positions.map((val) =>
+                <tr key={val.account}>
+                    <td key={val.account}> {val.account}
+                    </td>
+                    <td key={val.premium}> {val.premium}
+                    </td>
+                    <td key={val.payouts}> {val.payouts}
+                    </td>
+                    <td key={val.startBlocks}> {val.startBlocks}
+                    </td>
+                </tr>
+                )}
+              </tbody>
+            </table>
+          </div>
+          </div>
+        );
+    }
   }
 }
 export default SyndicatePositions;
