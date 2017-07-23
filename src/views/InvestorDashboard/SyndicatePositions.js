@@ -25,23 +25,23 @@ class SyndicatePositions extends React.Component {
       return (
         <div>
             <div className="row">
-            <div className="col-md-6">
-            <span className="h1 facebook">Dashboard</span>
+            <div className="col-md-4">
+            <span className="h1" style={{color:"#3b5998"}}>Dashboard</span>
                 </div>
-                <div className="col-md-3">
-                 <span className="h3" style={{textAlign:"right"}}>Syndicate Balance</span><br />
-                 <span className="h3" style={{textAlign:"right"}}>Escrow Balance</span><br />
-                 <span className="h3" style={{textAlign:"right"}}>Your Liquid Balance</span><br />     
-                 <span className="h3" style={{textAlign:"right"}}>Your Escrow Balance</span><br />
+                <div className="col-md-4">
+                 <div className="h3" style={{textAlign:"right"}}>Syndicate Balance</div>
+                 <div className="h3" style={{textAlign:"right"}}>Escrow Balance</div>
+                 <div className="h3" style={{textAlign:"right"}}>Your Liquid Balance</div>   
+                 <div className="h3" style={{textAlign:"right"}}>Your Escrow Balance</div>
                     </div>
-                    <div className="col-md-3">
-                 <span className="h3" style={{textAlign:"left"}}>{this.state.investorData.totalSupply}</span><br />
-                 <span className="h3" style={{textAlign:"left"}}>{this.state.investorData.escrowBalance}</span><br />
-                 <span className="h3" style={{textAlign:"left"}}>{this.state.investorData.userBalance}</span><br />
-                 <span className="h3" style={{textAlign:"left"}}>{this.state.investorData.userEscrowBalance}</span><br />
+                    <div className="col-md-4">
+                 <div className="h3" style={{textAlign:"left"}}>{this.state.investorData.totalSupply}</div>
+                 <div className="h3" style={{textAlign:"left"}}>{this.state.investorData.escrowBalance}</div>
+                 <div className="h3" style={{textAlign:"left"}}>{this.state.investorData.userBalance}</div>
+                 <div className="h3" style={{textAlign:"left"}}>{this.state.investorData.userEscrowBalance}</div>
                         </div>
                 </div>
-
+                <hr />
         </div>    
       );
   }
