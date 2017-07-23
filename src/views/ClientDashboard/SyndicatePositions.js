@@ -1,6 +1,11 @@
 import React from 'react';
 import contractApi from './../../ContractApi';
 
+
+//TODO
+// 1. get data on component contractApi
+// populate list
+
 class SyndicatePositions extends React.Component {
 
   constructor(){
