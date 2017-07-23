@@ -1,15 +1,23 @@
 import React, { Component } from 'react';
 import ContractApi from './../../ContractApi';
-
+import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
+import BuyPolicy from '../../Components/BuyPolicy';
 class ClientQuotes extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       macbookQuotes: [],
       cropQuotes: [],
+      modal: false
     };
   }
 
+  
+  toggle() {
+    this.setState({
+      modal: !this.state.modal
+    });
+  }
   componentDidMount() {
 
     ContractApi.getMacbookQuotes().then((result) => {
@@ -37,12 +45,8 @@ class ClientQuotes extends React.Component {
     });
   }
 
-  getQuote(isMacbook) {
-    if (isMacbook) {
-    ContractApi.createMacbookQuote(2017, "123456");
-    } else {
-     ContractApi.createCropQuote(20, 540);     
-    }
+  createQuote(isMacbook) {
+
   }
 
   buyCropInsurance(quoteId) {
@@ -58,54 +62,46 @@ class ClientQuotes extends React.Component {
     console.log(this.state.macbookQuotes);
     return (
       <div>
-        <button onClick={() => { this.getQuote(true) }}>Get a Macbok Quote</button>
-        <button onClick={() => { this.getQuote(false) }}>Get a Crop Quote</button>        
-        <div>
-          <h3>Crop Quotes</h3>
-          <table>
-            <thead>
-              <th>Quote Id</th>
-              <th>Premium</th>
-              <th>Payout</th>
-              <th>Duration</th>
-              <th />
-            </thead>
-            <tbody>
-              {this.state.cropQuotes.map((cropQuote, id) =>
-                  <tr key={id}>
-                    <td>{cropQuote.quoteId}</td>
-                    <td>{cropQuote.premium}</td>
-                    <td>{cropQuote.payout}</td>
-                    <td>{cropQuote.duration}</td>
-                    <td><button onClick={() => { this.buyCropInsurance(cropQuote.quoteId) }}>Buy</button></td>
-                  </tr>
-              )}
-            </tbody>
-          </table>
-          <br />
-          <h3>Macbook Quotes</h3>
-          <table>
-            <thead>
-              <th>Quote Id</th>
-              <th>Premium</th>
-              <th>Payout</th>
-              <th>Duration</th>
-              <th />
-            </thead>
-            <tbody>
-              {this.state.macbookQuotes.map((macbookQuote, id) =>
-                  <tr key={id}>
-                    <td>{macbookQuote.quoteId}</td>
-                    <td>{macbookQuote.premium}</td>
-                    <td>{macbookQuote.payout}</td>
-                    <td>{macbookQuote.duration}</td>
-                    <td><button onClick={() => { this.buyMacbookInsurance(macbookQuote.quoteId) }}>Buy</button></td>
-                  </tr>
-              )}
-            </tbody>
-          </table>
-        </div>
-      </div>
+        <button type="button" className="btn btn-primary" onClick={() => { this.toggle() }}>New Quote </button>  
+        <div className="animated fadeIn">
+        <div className="row">
+          <div className="col-lg-12">
+            <div className="card">
+              <div className="card-header">
+                <i className="fa fa-align-justify"></i> Quotes
+              </div>
+              <div className="card-block">
+                <table className="table">
+                <thead>
+                  <th>Quote Id</th>
+                  <th>Premium</th>
+                  <th>Payout</th>
+                  <th>Duration</th>
+                  <th />
+                </thead>
+                <tbody>
+                  {this.state.macbookQuotes.map((macbookQuote, id) =>
+                      <tr key={id}>
+                        <td>{macbookQuote.quoteId}</td>
+                        <td>{macbookQuote.premium}</td>
+                        <td>{macbookQuote.payout}</td>
+                        <td>{macbookQuote.duration}</td>
+                      </tr>
+                  )}
+                </tbody>
+            </table>
+            </div>
+            </div>
+            </div>
+            </div>
+          </div>
+          <Modal isOpen={this.state.modal} toggle={this.toggle} className={this.props.className}>
+            <ModalHeader toggle={this.toggle}>Modal title</ModalHeader>
+            <ModalBody>
+              <BuyPolicy />
+            </ModalBody>
+          </Modal>
+          </div>
     );
   }
 }

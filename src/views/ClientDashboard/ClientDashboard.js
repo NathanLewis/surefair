@@ -8,7 +8,7 @@ class ClientDashboard extends Component {
     render() {
         return ( <
             div className = "animated fadeIn" >
-            <BuyPolicy />
+            <ClientQuotes />
             </div>
         )
     }
