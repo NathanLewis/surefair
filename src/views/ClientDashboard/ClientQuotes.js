@@ -14,9 +14,8 @@ class ClientQuotes extends React.Component {
 
   
   toggle() {
-    this.setState({
-      modal: !this.state.modal
-    });
+    this.state.modal = !this.state.modal;
+    this.setState(this.state);
   }
 
   componentDidMount() {
@@ -102,8 +101,8 @@ class ClientQuotes extends React.Component {
             </div>
             </div>
           </div>
-          <Modal isOpen={this.state.modal} toggle={this.toggle} className={this.props.className}>
-            <ModalHeader toggle={this.toggle}>Modal title</ModalHeader>
+          <Modal isOpen={this.state.modal} toggle={() => {this.toggle()}} className={this.props.className}>
+            <ModalHeader toggle={() => {this.toggle()}}>Modal title</ModalHeader>
             <ModalBody>
               <BuyPolicy onComplete={() => {this.toggle()}} />
             </ModalBody>
