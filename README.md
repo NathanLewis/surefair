@@ -1,5 +1,42 @@
 This project was bootstrapped with [Create React App](https://github.com/facebookincubator/create-react-app).
 
+## Solidity Contracts
+
+
+### Contracts in insurance.sol
+
+### Oracle:
+The base-contract for Agent who implements quoting facility for a specific insurable asset.
+
+### CropOracle:
+Example implementation of an Oracle for crop-based insurance.
+
+### MacBookOracle:
+Example implementation of an Oracle for Macbook laopt insurance.
+
+### Syndicate:
+Insurance contracts are underwritten using a syndicated fund-pool per asset type. Funds for each syndicate is crowd-sourced from a collection of investors / underwriters, who purchase crypto-tokens for the desired amount of investment. Issuance of a new insurance policy is fully collateralised from the fund pool, and the corresponding amount is transferred to an escrow account (SFEscrow). 
+
+### UserData:
+[TODO]
+
+### Contracts in SFEscrow.sol
+
+### SFEscrow:
+Holds total funding collateral for all open policies belongs to agiven Syndicate Conract.
+Collateral corresponds to a given policy is released to the Syndicate pool when a policy is expired, or redeemed to the client if the claim is made during the policy period.
+
+
+
+## Process Flow
+[TODO]
+
+
+## Future Enhancements
+[TODO]
+
+
+
 Below you will find some information on how to perform common tasks.<br>
 You can find the most recent version of this guide [here](https://github.com/facebookincubator/create-react-app/blob/master/packages/react-scripts/template/README.md).
 
