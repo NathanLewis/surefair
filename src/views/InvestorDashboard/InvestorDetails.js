@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import ContractApi from './../../ContractApi';
+import { Progress } from 'reactstrap';
 
 class InvestorDetails extends React.Component {
   constructor(props) {
@@ -68,77 +69,71 @@ class InvestorDetails extends React.Component {
 
   render() {
     console.log(JSON.stringify(this.state.investorData));
-    console.log(this.state.macbookQuotes);
+    const total = this.state.investorData.escrowBalance + this.state.investorData.totalSupply;
+    if(total) {
     return (
-      <div>
+      <div className="card">
+      <div className="card-header">
+        Dashboard
+      </div>
+      <div className="card-block">
         <div className="row">
-          <div className="col-md-4">
-            <span className="h1" style={{ color: "#3b5998" }}>Dashboard</span>
+          <div className="col-sm-12">
+            <div className="row">
+              <div className="col-sm-6">
+                <div className="callout callout-info">
+                  <div className="text-muted h5">Syndicate Total Balance</div><br/>
+                  <strong className="h4">{this.state.investorData.totalSupply.toLocaleString()}</strong>
+                  <div className="chart-wrapper">
+                    <canvas id="sparkline-chart-1" width="100" height="30"></canvas>
+                  </div>
+                </div>
+              </div>
+              <div className="col-sm-6">
+                <div className="callout callout-danger">
+                  <div className="text-muted h5">Syndicate Escrow Balance</div><br/>
+                  <strong className="h4">{this.state.investorData.escrowBalance.toLocaleString()}</strong>
+                  <div className="chart-wrapper">
+                    <canvas id="sparkline-chart-2" width="100" height="30"></canvas>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <hr className="mt-0"/>
           </div>
-          <div className="col-md-4">
-            <div className="h4" style={{ textAlign: "right" }}>Syndicate Total Balance</div>
-            <div className="h4" style={{ textAlign: "right" }}>Syndicate Escrow Balance</div>
-            <div className="h4" style={{ textAlign: "right" }}>Syndicate Liquid Balance</div>
-            <div className="h4" style={{ textAlign: "right" }}>Your Balance</div>
+          <div className="col-sm-12">
+            <div className="row">
+              <div className="col-sm-6">
+                <div className="callout callout-warning">
+                  <div className="text-muted h5">Syndicate Liquid Balance</div><br/>
+                  <strong className="h4">{total.toLocaleString()}</strong>
+                  <div className="chart-wrapper">
+                    <canvas id="sparkline-chart-3" width="100" height="30"></canvas>
+                  </div>
+                </div>
+              </div>
+              <div className="col-sm-6">
+                <div className="callout callout-success">
+                  <div className="text-muted h5">My Balance</div><br/>
+                  <strong className="h4">{this.state.investorData.userBalance.toLocaleString()}</strong>
+                  <div className="chart-wrapper">
+                    <canvas id="sparkline-chart-4" width="100" height="30"></canvas>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
-          <div className="col-md-4">
-            <div className="h4" style={{ textAlign: "left" }}>{this.state.investorData.totalSupply}</div>
-            <div className="h4" style={{ textAlign: "left" }}>{this.state.investorData.escrowBalance}</div>
-            <div className="h4" style={{ textAlign: "left" }}>{this.state.investorData.escrowBalance + this.state.investorData.totalSupply}</div>
-            <div className="h4" style={{ textAlign: "left" }}>{this.state.investorData.userBalance}</div>
-          </div>
-        </div>
-        <hr />
-        <button onClick={() => { this.getQuote(true) }}>Get a Macbok Quote</button>
-        <button onClick={() => { this.getQuote(false) }}>Get a Crop Quote</button>        
-        <div>
-          <h3>Crop Quotes</h3>
-          <table>
-            <thead>
-              <th>Quote Id</th>
-              <th>Premium</th>
-              <th>Payout</th>
-              <th>Duration</th>
-              <th />
-            </thead>
-            <tbody>
-              {this.state.cropQuotes.map((cropQuote, id) =>
-                  <tr key={id}>
-                    <td>{cropQuote.quoteId}</td>
-                    <td>{cropQuote.premium}</td>
-                    <td>{cropQuote.payout}</td>
-                    <td>{cropQuote.duration}</td>
-                    <td><button onClick={() => { this.buyCropInsurance(cropQuote.quoteId) }}>Buy</button></td>
-                  </tr>
-              )}
-            </tbody>
-          </table>
-          <br />
-          <h3>Macbook Quotes</h3>
-          <table>
-            <thead>
-              <th>Quote Id</th>
-              <th>Premium</th>
-              <th>Payout</th>
-              <th>Duration</th>
-              <th />
-            </thead>
-            <tbody>
-              {this.state.macbookQuotes.map((macbookQuote, id) =>
-                  <tr key={id}>
-                    <td>{macbookQuote.quoteId}</td>
-                    <td>{macbookQuote.premium}</td>
-                    <td>{macbookQuote.payout}</td>
-                    <td>{macbookQuote.duration}</td>
-                    <td><button onClick={() => { this.buyMacbookInsurance(macbookQuote.quoteId) }}>Buy</button></td>
-                  </tr>
-              )}
-            </tbody>
-          </table>
         </div>
       </div>
+    </div>
     );
   }
+  else {
+    return(
+      <div> </div>
+    )
+  }
+}
 }
 
 export default InvestorDetails;
