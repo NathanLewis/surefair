@@ -421,7 +421,7 @@ contract Syndicate {
     function() payable {
         if (msg.value == 0) { return; }
 
-        uint256 tokensIssued = (msg.value * 1000);
+        uint256 tokensIssued = (msg.value / 10e13);
         if (totalSupply + escrow.getBalance() + tokensIssued > maxCapitalization) {
             throw;
         }
