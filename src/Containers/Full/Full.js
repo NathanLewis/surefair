@@ -26,7 +26,7 @@ class Full extends Component {
             <Breadcrumb/>
             <div className = "container-fluid">
             <Switch>
-            <Route path = "/Investor" name = "Investor" component = { InvestorDashboard }/> 
+            <Route path = "/Investor" name = "Investor Dashboard" component = { InvestorDashboard }/> 
             <Route path = "/Client" name = "Client" component = { BuyPolicy }/> 
             </Switch>
             </div> 
