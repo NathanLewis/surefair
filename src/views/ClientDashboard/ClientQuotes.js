@@ -1,30 +1,17 @@
 import React, { Component } from 'react';
 import ContractApi from './../../ContractApi';
 
-class InvestorDetails extends React.Component {
+class ClientQuotes extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      investorData: {},
       macbookQuotes: [],
       cropQuotes: [],
     };
   }
 
   componentDidMount() {
-    ContractApi.getInvestorOverview().then((result) => {
-      this.setState({
-        investorData: result
-      })
-    }).catch((error) => {
-      console.log(error);
-    });
 
-    ContractApi.getClientContracts().then((result) => {
-      console.log('CLIENT CONTRACTS = ' + JSON.stringify(result));
-    }).catch((error) => {
-      console.log('error ' + error);
-    })
     ContractApi.getMacbookQuotes().then((result) => {
       console.log('MACBOOK QUOTES = ' + JSON.stringify(result));
       let thingy = [];
@@ -71,24 +58,6 @@ class InvestorDetails extends React.Component {
     console.log(this.state.macbookQuotes);
     return (
       <div>
-        <div className="row">
-          <div className="col-md-4">
-            <span className="h1" style={{ color: "#3b5998" }}>Dashboard</span>
-          </div>
-          <div className="col-md-4">
-            <div className="h4" style={{ textAlign: "right" }}>Syndicate Total Balance</div>
-            <div className="h4" style={{ textAlign: "right" }}>Syndicate Escrow Balance</div>
-            <div className="h4" style={{ textAlign: "right" }}>Syndicate Liquid Balance</div>
-            <div className="h4" style={{ textAlign: "right" }}>Your Balance</div>
-          </div>
-          <div className="col-md-4">
-            <div className="h4" style={{ textAlign: "left" }}>{this.state.investorData.totalSupply}</div>
-            <div className="h4" style={{ textAlign: "left" }}>{this.state.investorData.escrowBalance}</div>
-            <div className="h4" style={{ textAlign: "left" }}>{this.state.investorData.escrowBalance + this.state.investorData.totalSupply}</div>
-            <div className="h4" style={{ textAlign: "left" }}>{this.state.investorData.userBalance}</div>
-          </div>
-        </div>
-        <hr />
         <button onClick={() => { this.getQuote(true) }}>Get a Macbok Quote</button>
         <button onClick={() => { this.getQuote(false) }}>Get a Crop Quote</button>        
         <div>
@@ -141,4 +110,4 @@ class InvestorDetails extends React.Component {
   }
 }
 
-export default InvestorDetails;
+export default ClientQuotes;

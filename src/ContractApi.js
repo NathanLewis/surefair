@@ -133,6 +133,7 @@ class ContractApi {
           let result = {
             premiums: [],
             payouts: [],
+            startBlocks: [],
             endBlocks: []
           };
           for (let i = 0; i < insuranceIds.length; i++) {
@@ -140,12 +141,13 @@ class ContractApi {
               if (e) {
                 reject(e);
               } else {
-                result.premiums.push(data[2]);
-                result.payouts.push(data[3]);
-                result.startBlock.push(data[5]);
-                result.endBlocks.push(data[6]);
+                console.log('DATA = ' + JSON.stringify(data));
+                result.premiums.push(Number(data[2]));
+                result.payouts.push(Number(data[3]));
+                result.startBlocks.push(Number(data[5]));
+                result.endBlocks.push(Number(data[6]));
                 count++;
-                if (count == insuranceIds.length + 1) {
+                if (count == insuranceIds.length - 1) {
                   resolve(result);
                 }
               }
