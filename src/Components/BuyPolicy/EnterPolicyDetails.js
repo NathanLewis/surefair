@@ -30,14 +30,14 @@ export default class EnterPolicyDetails extends Component{
         return(
              <div className="step step2">
                 <div className="form-group row">
-                <label htmlFor="serial-number" className="col-2 col-form-label">Serial Number</label>
-                    <div className="col-10">
+                <label htmlFor="serial-number" className="col-4 col-form-label">Serial Number</label>
+                    <div className="col-8">
                         <input className="form-control" type="text" value={this.state.serialNumber} onChange={this.handleSNoChange} id="serial-number" placeholder="####-####-####-####"/>
                     </div>
                 </div>
                 <div className="form-group row">
-                <label htmlFor="year" className="col-2 col-form-label">Year of Manufacture</label>
-                    <div className="col-10">
+                <label htmlFor="year" className="col-4 col-form-label">Year of Manufacture</label>
+                    <div className="col-8">
                         <input className="form-control" type="number" value={this.state.year} onChange={this.handleYearChange} id="year" placeholder="YYYY"/>
                     </div>
                 </div>
@@ -52,14 +52,14 @@ export default class EnterPolicyDetails extends Component{
         return(
              <div className="step step2">
                 <div className="form-group row">
-                <label for="serial-number" className="col-2 col-form-label">Latitude</label>
-                    <div className="col-10">
+                <label for="serial-number" className="col-4 col-form-label">Latitude</label>
+                    <div className="col-8">
                         <input className="form-control" type="number" value="" id="serial-number" placeholder="XX.XX"/>
                     </div>
                 </div>
                 <div className="form-group row">
-                <label for="year" className="col-2 col-form-label">Longitude</label>
-                    <div className="col-10">
+                <label for="year" className="col-4 col-form-label">Longitude</label>
+                    <div className="col-8">
                         <input className="form-control" type="number" value="" id="year" placeholder="XX.XX"/>
                     </div>
                 </div>
