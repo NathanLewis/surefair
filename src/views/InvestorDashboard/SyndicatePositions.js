@@ -46,37 +46,51 @@ class SyndicatePositions extends React.Component {
       );
     }
       else{
-        return (
-          <div>
-            <h2 className="h2" >Investor Positions</h2>
-          <div className="table-responsive">
-            <table className="table" >
-              <thead>
-               <tr>
-                  <th>Account </th>
-                  <th>Premium </th>
-                  <th>Payouts </th>
-                  <th>Start Block </th>
-                </tr>
-              </thead>
-              <tbody>
-
-                {this.state.positions.map((val) =>
-                <tr key={val.account}>
-                    <td key={val.account}> {val.account}
-                    </td>
-                    <td key={val.premium}> {val.premium}
-                    </td>
-                    <td key={val.payouts}> {val.payouts}
-                    </td>
-                    <td key={val.startBlocks}> {val.startBlocks}
-                    </td>
-                </tr>
-                )}
-              </tbody>
-            </table>
+        return(
+          <div className="animated fadeIn">
+          <div className="row">
+            <div className="col-lg-12">
+              <div className="card">
+                <div className="card-header">
+                  <i className="fa fa-align-justify"></i> Positions
+                </div>
+                <div className="card-block">
+                  <table className="table">
+                    <thead>
+                      <tr>
+                        <th>Account </th>
+                        <th>Premium </th>
+                        <th>Payouts </th>
+                        <th>Start Block </th>
+                        <th>End Block </th>
+                        <th>Status</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                    {this.state.positions.map((val) =>
+                      <tr key={val.startBlocks}>
+                          <td key={val.account}> {val.account}
+                          </td>
+                          <td key={val.premium}> {val.premium}
+                          </td>
+                          <td key={val.payouts}> {val.payouts}
+                          </td>
+                          <td key={val.endBlocks}> {val.endBlocks}
+                          </td>
+                          <td key={val.startBlocks}> {val.startBlocks}
+                          </td>
+                              <td>
+                              <span className="badge badge-success">Active</span>
+                            </td>
+                       </tr>
+                      )}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
           </div>
-          </div>
+        </div>
         );
     }
   }
