@@ -16,7 +16,7 @@ export default class BuyPolicy extends Component{
     render(){
         return(
            <div className='example'>
-        <div className='step-progress'>
+        <div className='step-progress' style={{textAlign: 'center'}}>
             <StepZilla 
             steps={steps}
             preventEnterSubmission={true}
