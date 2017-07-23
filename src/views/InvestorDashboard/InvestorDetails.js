@@ -6,8 +6,8 @@ class InvestorDetails extends React.Component {
     super(props);
     this.state = {
       investorData: {},
-      macbookQuotes: {},
-      cropQuotes: {},
+      macbookQuotes: [],
+      cropQuotes: [],
     };
   }
 
