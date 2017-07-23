@@ -1,7 +1,7 @@
 import Web3 from 'web3';
 var web3;
 
-var syndicateContractAddress = "0xeb1bc2f1974e0f130196d1f565afa5563a3dd3c8";
+var syndicateContractAddress = "0xf45d45fa6de62663fb1ab07aad129494f6f35499";
 var macbookContractAddress = "0xa1ca21453c56ad9b42cea29e9980789330756de9";
 var cropContractAddress = "0x4f13c6805692b9a2a5955a021ce840c15d492f7d";
 
