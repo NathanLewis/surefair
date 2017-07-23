@@ -31,6 +31,10 @@ contract CropOpracle {
         return ("Crop Insurance", "An oracle to issue crop insurance.");
     }
 
+    function getUserQuoteIds(address _client) constant returns (uint64[]) {
+        return clientQuotes[_client];
+    }
+    
     function getQuote(address _client, uint64 _quoteId) constant returns (uint256, uint256, uint256, bytes32) {
          Quote quote = quoteData[_quoteId];
          return (quote.clientCost, quote.clientPayout, quote.duration, quote.ipfsHash);
@@ -85,12 +89,16 @@ contract MacBookOracle {
 
     address creator;
 
-    function MacBookOracle(address creator) {
+    function MacBookOracle() {
         creator = msg.sender;
     }
 
     function getOracleDetails() constant returns (string, string) {
         return ("Macbook Insurance", "A Macbook oracle designed exclusively to insure macbooks created between 2016 and 2017.");
+    }
+
+    function getUserQuoteIds(address _client) constant returns (uint64[]) {
+        return clientQuotes[_client];
     }
 
     function getQuote(address _client, uint64 _quoteId) constant returns (uint256, uint256, uint256, bytes32) {
