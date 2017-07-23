@@ -9,6 +9,7 @@ class ClientDashboard extends Component {
         return ( <
             div className = "animated fadeIn" >
             <ClientQuotes />
+            <ClientPositions />
             </div>
         )
     }

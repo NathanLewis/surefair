@@ -25,32 +25,37 @@ class ClientPositions extends React.Component {
     console.log(JSON.stringify(this.state.investorData));
     console.log(this.state.macbookQuotes);
     return (
-      <div>
+      <div className="animated fadeIn">
         <div className="row">
-          <div className="col-md-4">
-            <span className="h1" style={{ color: "#3b5998" }}>Active Policies</span>
-          </div>
-        </div>
-          <table>
-            <thead>
-              <th>Premium</th>
-              <th>Payout</th>
-              <th>Start Block</th>
-              <th>End Block</th>
-            </thead>
-            <tbody>
-              {this.state.clientContracts.map((contract, id) =>
-                  <tr key={id}>
-                    <td>{contract.premium}</td>
-                    <td>{contract.payout}</td>
-                    <td>{contract.startBlock}</td>
-                    <td>{contract.endBlock}</td>
-                  </tr>
-              )}
-            </tbody>
-          </table>
-        <hr />
-       
+           <div className="col-lg-12">
+            <div className="card">
+              <div className="card-header">
+                <i className="fa fa-align-justify"></i> Positions
+              </div>
+              <div className="card-block">
+                <table className="table">
+                  <thead>
+                    <th>Premium</th>
+                    <th>Payout</th>
+                    <th>Start Block</th>
+                    <th>End Block</th>
+                  </thead>
+                  <tbody>
+                    {this.state.clientContracts.map((contract, id) =>
+                        <tr key={id}>
+                          <td>{contract.premium}</td>
+                          <td>{contract.payout}</td>
+                          <td>{contract.startBlock}</td>
+                          <td>{contract.endBlock}</td>
+                        </tr>
+                    )}
+                  </tbody>
+                </table>
+              <hr />
+            </div>
+            </div>
+            </div>
+            </div>
       </div>
     );
   }

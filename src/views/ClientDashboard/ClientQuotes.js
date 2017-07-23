@@ -91,8 +91,7 @@ class ClientQuotes extends React.Component {
                         <td>{macbookQuote.premium}</td>
                         <td>{macbookQuote.payout}</td>
                         <td>{macbookQuote.duration}</td>
-                        <td><button className="btn btn-success">Accept</button></td>
-                        <td><button className="btn btn-fail">Reject</button></td>
+                        <td><button className="btn btn-success" onClick={() => {this.buyMacbookInsurance(macbookQuote.quoteId)}}>Buy</button></td>
                       </tr>
                   )}
                 </tbody>
