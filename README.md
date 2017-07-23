@@ -1,5 +1,17 @@
 This project was bootstrapped with [Create React App](https://github.com/facebookincubator/create-react-app).
 
+## SureFair: Overall Funcional Architecture
+
+SureFair hosts a syndicated fund for each category of insuranable asset type. Each syndicate is crowdsourced by a pool of underwriters (investors). Agents / Oracles are external authorirites that provide market-based pricing for specific insurance asset classes. Underwriters of the syndicate elect Oracle/Agents using a voting mechanism.
+
+Upon a customer agreeing on premimum quotes and terms of insurance, underwriters issues a policy thereby entering into a binding contract. Each policy is fully collateralized, and the corresponding funds are transferred from the syndicate pool to an escrow account, and is held until the termination of the policy.
+
+A policy is terminated either at the end of its term period, or if the customer files for a claim and the claim is authorised ("redeemed"). If the policy expires (no redemption), then the collateral is relesed to the syndicate pool. Otherwise, the collateral is redeemed as the insurance payout.
+
+[TODO: Verify this]
+Any unpaid premium amounts during a given time interval in the syndicate pool is accumulated as "dividends" for the investors who participated in underwriting contracts during that period, that is, pro-rated to the amount of their investments.
+
+
 ## Solidity Contracts
 
 
