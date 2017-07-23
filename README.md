@@ -26,8 +26,6 @@ Any **unpaid premium amounts** during a given time interval in the syndicate poo
 ## Solidity Contracts
 
 
-### Contracts in insurance.sol
-
 ### Oracle:
 The base-contract for Agent who implements price quoting and claims verification facilities for a specific insurable asset type.
 
@@ -39,9 +37,6 @@ Example implementation of an Oracle for Macbook laptop insurance. The specific l
 
 ### Syndicate:
 A Syndicate is for a given insurable asset type. Each insurance contract is underwritten using this syndicated fund-pool. Funds for each syndicate is crowd-sourced from a collection of investors / underwriters, who purchase crypto-tokens for the desired amount of investment. Issuance of a new insurance policy is fully collateralised from the fund pool, and the corresponding amount is transferred to an escrow account (SFEscrow) -see below.
-
-
-### Contracts in SFEscrow.sol
 
 ### SFEscrow:
 Holds total funding collateral for all open policies belongs to agiven Syndicate Conract at a point in time. Collateral corresponds to a given policy is released to the Syndicate pool when a policy is expired, or redeemed to the client if the claim is made during the policy period.
